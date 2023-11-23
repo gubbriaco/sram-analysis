@@ -37,7 +37,7 @@ READ PHASE
 .param l_nmos_q_neg 0.12u
 .param w_nmos_q_neg 0.48u
 .param vdd 1
-.param vwl 0
+.param vwl 1
 .param vbl 1
 .param vblneg 1
 .param vsweep 1
