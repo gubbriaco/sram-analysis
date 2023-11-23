@@ -28,9 +28,6 @@ w_nmos_q_neg = '0.48u'
 
 # voltage
 vdd = 1
-vwl = 1
-vbl = 1
-vblneg = 1
 vsweep = 1
 
 # dc Vsweep
