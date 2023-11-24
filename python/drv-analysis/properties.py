@@ -27,8 +27,8 @@ l_nmos_q_neg = '0.12u'
 w_nmos_q_neg = '0.48u'
 
 # voltage
-vdd = 1
-vsweep = 1
+vdd = '1'
+vsweep = '1'
 
 # dc Vsweep
 dc_vsweep_start = 0

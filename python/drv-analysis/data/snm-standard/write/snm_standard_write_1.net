@@ -1,4 +1,4 @@
-* D:\Disco D\universita\magistrale\progettazione-low-power\progetti\progetto-2\ltspice\models\snm-standard\write\snm_standard_write.asc
+* D:\Disco D\universita\magistrale\progettazione-low-power\progetti\progetto-2\ltspice\models\sram-6t\snm-standard\write\snm_standard_write.asc
 M3 Qneg Q 0 0 EECMOSN l={l_nmos_q_neg} w={w_nmos_q_neg}
 M4 VDD Q Qneg VDD EECMOSP l={l_pmos_q_neg} w={w_pmos_q_neg}
 Vdd VDD 0 {vdd}
@@ -26,7 +26,7 @@ Vwl WL 0 {vwl}
 .PARAM vdd=1  ; Batch instruction
 .PARAM vwl=1  ; Batch instruction
 .PARAM vbl=1  ; Batch instruction
-.PARAM vblneg=1  ; Batch instruction
+.PARAM vblneg=0  ; Batch instruction
 .PARAM vsweep=1  ; Batch instruction
 .inc ../../../../../ltspice/utils/utils-montecarlo-experiments/RIT_Models_For_LTSPICE.txt
 .dc Vsweep 0 1 0.01
