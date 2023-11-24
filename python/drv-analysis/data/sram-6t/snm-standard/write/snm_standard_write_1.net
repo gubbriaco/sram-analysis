@@ -28,7 +28,7 @@ Vwl WL 0 {vwl}
 .PARAM vbl=1  ; Batch instruction
 .PARAM vblneg=0  ; Batch instruction
 .PARAM vsweep=1  ; Batch instruction
-.inc ../../../../../ltspice/utils/utils-montecarlo-experiments/RIT_Models_For_LTSPICE.txt
+.inc ../../../../../../ltspice/utils/utils-montecarlo-experiments/RIT_Models_For_LTSPICE.txt
 .dc Vsweep 0 1 0.01
 .step param w_ax 0.12u 0.24u 0.01u
 .meas w_ax_values param w_ax
