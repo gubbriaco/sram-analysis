@@ -1,0 +1,24 @@
+* D:\Disco D\universita\magistrale\progettazione-low-power\progetti\progetto-2\ltspice\models\snm-seevinck\curva_a_farfalla_hold.asc
+Vsweep u NC_01 1
+E1 N002 N004 V1 0 0.707
+E2 N004 NC_02 u 0 0.707
+M1 N001 N002 Vout1 N001 EECMOSP l=0.12u w=0.12u
+M2 Vout1 N002 0 0 EECMOSN l=0.12u w=0.48u
+V2 N001 0 1
+E3 V1 N003 u 0 1
+E4 N003 0 Vout1 0 1.41
+E5 V2 N007 u 0 -1
+E6 N007 0 Vout2 0 1.41
+E7 N006 N008 V2 0 0.707
+E8 N008 NC_03 u 0 -0.707
+M3 N005 N006 Vout2 N005 EECMOSP l=0.12u w=0.12u
+M4 Vout2 N006 0 0 EECMOSN l=0.12u w=0.48u
+V1 N005 0 1
+.model NMOS NMOS
+.model PMOS PMOS
+.lib C:\Users\giorg\AppData\Local\LTspice\lib\cmp\standard.mos
+.inc "D:\Disco D\universita\magistrale\progettazione-low-power\esercitazioni\esercitazione4\ltspice\modelli\RIT_Models_For_LTSPICE.txt"
+.step param 1 400 1
+.dc Vsweep -0.707 0.707 0.01
+.backanno
+.end
