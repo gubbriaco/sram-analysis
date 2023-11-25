@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 from matplotlib import patches
 from scipy.interpolate import interp1d
 
@@ -41,7 +40,7 @@ def standard_processing(x_vq, vq, x_vqneg, vqneg, ax, factor=100):
 
     snm = np.sqrt(max_len)[0]
 
-    ax.text(x[0] + edge + 0.05, y[0] + edge + 0.05, 'SNM= %.3f' % snm, fontsize=14)
+    ax.text(x[0] + edge + 0.05, y[0] + edge + 0.05, 'SNM= %.3f  mV' % snm, fontsize=14)
     ax.add_patch(patches.Rectangle((x[0], y[0]), width=edge, height=edge, fill=False))
     ax.plot([x[0], x[0] + edge], [y[0], y[0] + edge], 'k')
 
@@ -61,9 +60,9 @@ def draw_inscribable_square(height, width, ax):
     x_snm_start, y_snm_start = width, 0
     x_snm_stop, y_snm_stop = width, height
 
-    ax.plot([x_snm_start, x_snm_stop], [y_snm_start, y_snm_stop], 'r-')
+    ax.plot([x_snm_start, x_snm_stop], [y_snm_start, y_snm_stop], 'k')
     snm = y_snm_stop
-    ax.text(x_snm_stop + 0.05, y_snm_stop + 0.05, 'SNM= %.3f' % snm, fontsize=14)
+    ax.text(x_snm_start + 0.05, y_snm_start + 0.05, 'SNM= %.3f mV' % snm, fontsize=14)
 
     return snm
 
@@ -91,7 +90,6 @@ def seevinck_processing(x_v1_minus_v2, v1_minus_v2, ax):
     snm = draw_inscribable_square(height, width, ax)
 
     ax.plot(x_v1_minus_v2, v1_minus_v2, 'red')
-    plt.title('Seevinck Method and SNM')
-    plt.show()
+    ax.grid()
 
     return snm
