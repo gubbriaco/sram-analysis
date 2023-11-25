@@ -1,8 +1,11 @@
-from utils.path import rit_models_for_ltspice_file_path
+from utils.path import rit_models_for_ltspice_file_path, rit_models_for_ltspice_montecarlo_file_path
 
 
 # rit-models
 rit_models = f'.inc {rit_models_for_ltspice_file_path}'
+
+# rit-models-gaussian
+rit_models_montecarlo = f'.inc {rit_models_for_ltspice_montecarlo_file_path}'
 
 
 ########################################################################################################################
@@ -77,11 +80,64 @@ dc_vsweep_step_seevinck = 0.01
 dc_vsweep_seevinck = f'.dc Vsweep {dc_vsweep_start_seevinck} {dc_vsweep_stop_seevinck} {dc_vsweep_step_seevinck}'
 
 # E1 E2 E3 E4 E5 E6 E7 E8
-e1 = '0.707'
-e2 = '0.707'
-e3 = '1'
-e4 = '1.41'
-e5 = '-1'
-e6 = '1.41'
-e7 = '0.707'
-e8 = '-0.707'
+e1_seevinck = '0.707'
+e2_seevinck = '0.707'
+e3_seevinck = '1'
+e4_seevinck = '1.41'
+e5_seevinck = '-1'
+e6_seevinck = '1.41'
+e7_seevinck = '0.707'
+e8_seevinck = '-0.707'
+
+
+########################################################################################################################
+# GAUSSIAN-VTH
+
+# AX
+l_ax_gaussian_vth = '0.12u'
+w_ax_gaussian_vth = '0.24u'
+w_ax_start_gaussian_vth = '0.12u'
+w_ax_stop_gaussian_vth = '0.24u'
+w_ax_step_gaussian_vth = '0.01u'
+w_ax_step_param_gaussian_vth = f'.step param w_ax {w_ax_start_seevinck} {w_ax_stop_seevinck} {w_ax_step_seevinck}'
+
+# save w_ax
+save_w_ax_gaussian_vth = '.meas w_ax_values param w_ax'
+
+# Q transistor
+l_pmos_q_gaussian_vth = '0.12u'
+w_pmos_q_gaussian_vth = '0.12u'
+l_nmos_q_gaussian_vth = '0.12u'
+w_nmos_q_gaussian_vth = '0.48u'
+
+# Q neg transistor
+l_pmos_q_neg_gaussian_vth = '0.12u'
+w_pmos_q_neg_gaussian_vth = '0.12u'
+l_nmos_q_neg_gaussian_vth = '0.12u'
+w_nmos_q_neg_gaussian_vth = '0.48u'
+
+# voltage
+vdd_gaussian_vth = '1'
+vsweep_gaussian_vth = '1'
+
+# dc Vsweep
+dc_vsweep_start_gaussian_vth = -0.650
+dc_vsweep_stop_gaussian_vth = 0.650
+dc_vsweep_step_gaussian_vth = 0.01
+dc_vsweep_gaussian_vth = f'.dc Vsweep {dc_vsweep_start_gaussian_vth} {dc_vsweep_stop_gaussian_vth} {dc_vsweep_step_gaussian_vth}'
+
+# E1 E2 E3 E4 E5 E6 E7 E8
+e1_gaussian_vth = '0.707'
+e2_gaussian_vth = '0.707'
+e3_gaussian_vth = '1'
+e4_gaussian_vth = '1.41'
+e5_gaussian_vth = '-1'
+e6_gaussian_vth = '1.41'
+e7_gaussian_vth = '0.707'
+e8_gaussian_vth = '-0.707'
+
+# step param run
+step_param_run_gaussian_vth_start = 1
+step_param_run_gaussian_vth_stop = 400
+step_param_run_gaussian_vth_step = 1
+step_param_run_gaussian_vth = f'.step param run {step_param_run_gaussian_vth_start} {step_param_run_gaussian_vth_stop} {step_param_run_gaussian_vth_step}'
