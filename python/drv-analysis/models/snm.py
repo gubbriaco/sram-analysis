@@ -86,9 +86,12 @@ def seevinck_processing(x_v1_minus_v2, v1_minus_v2, ax):
     segments = find_segments(v1_minus_v2)
 
     height = max(segments[0])
-    width = len(segments[0])
-    draw_inscribable_square(height, width, ax)
+    i_width = np.where(v1_minus_v2 == height)[0]
+    width = x_v1_minus_v2[i_width]
+    snm = draw_inscribable_square(height, width, ax)
 
     ax.plot(x_v1_minus_v2, v1_minus_v2, 'red')
     plt.title('Seevinck Method and SNM')
     plt.show()
+
+    return snm
