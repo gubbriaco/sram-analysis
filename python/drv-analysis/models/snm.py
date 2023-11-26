@@ -1,9 +1,9 @@
 import numpy as np
 from matplotlib import patches
 from scipy.interpolate import interp1d
+from math import sqrt
 
-
-def processing(x_vq, vq, x_vqneg, vqneg, ax, factor=100):
+def standard_processing(x_vq, vq, x_vqneg, vqneg, ax, factor=100):
     x1 = np.linspace(np.min(x_vq), np.max(x_vq), len(vq) * int(factor))
     f = interp1d(x_vq, vq, kind='cubic')
     y1 = f(x1)
