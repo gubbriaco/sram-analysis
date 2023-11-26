@@ -3,7 +3,7 @@ from matplotlib import patches
 from scipy.interpolate import interp1d
 
 
-def standard_processing(x_vq, vq, x_vqneg, vqneg, ax, factor=100):
+def processing(x_vq, vq, x_vqneg, vqneg, ax, factor=100):
     x1 = np.linspace(np.min(x_vq), np.max(x_vq), len(vq) * int(factor))
     f = interp1d(x_vq, vq, kind='cubic')
     y1 = f(x1)
@@ -56,40 +56,8 @@ def standard_processing(x_vq, vq, x_vqneg, vqneg, ax, factor=100):
     return snm
 
 
-def draw_inscribable_square(height, width, ax):
-    x_snm_start, y_snm_start = width, 0
-    x_snm_stop, y_snm_stop = width, height
-
-    ax.plot([x_snm_start, x_snm_stop], [y_snm_start, y_snm_stop], 'k')
-    snm = y_snm_stop
-    ax.text(x_snm_start + 0.05, y_snm_start + 0.05, 'SNM= %.3f mV' % snm, fontsize=14)
-
-    return snm
-
-
-def find_segments(samples):
-    local_maxima = [i for i in range(1, len(samples) - 1) if samples[i - 1] < samples[i] > samples[i + 1]]
-    segments = []
-    start = 0
-    for local_max in local_maxima:
-        end = local_max
-        segment = samples[start:end + 1]
-        segments.append(segment)
-        start = end
-    segment = samples[start:]
-    segments.append(segment)
-    return segments
-
-
-def seevinck_processing(x_v1_minus_v2, v1_minus_v2, ax):
-    segments = find_segments(v1_minus_v2)
-
-    height = max(segments[0])
-    i_width = np.where(v1_minus_v2 == height)[0]
-    width = x_v1_minus_v2[i_width]
-    snm = draw_inscribable_square(height, width, ax)
-
-    ax.plot(x_v1_minus_v2, v1_minus_v2, 'red')
-    ax.grid()
-
-    return snm
+def rotate_points(x, y, angle_degrees):
+    angle_radians = np.radians(angle_degrees)
+    x_rotated = x * np.cos(angle_radians) - y * np.sin(angle_radians)
+    y_rotated = x * np.sin(angle_radians) + y * np.cos(angle_radians)
+    return x_rotated, y_rotated
