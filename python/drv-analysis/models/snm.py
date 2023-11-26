@@ -38,7 +38,7 @@ def standard_processing(x_vq, vq, x_vqneg, vqneg, ax, factor=100):
     x, y = [x2[mask_index2], x1[mask_index1]], [y2[mask_index2], y1[mask_index1]]
     edge = np.sqrt(max_len / 2)
 
-    snm = np.sqrt(max_len)[0]
+    snm = edge
 
     ax.text(x[0] + edge + 0.05, y[0] + edge + 0.05, 'SNM= %.3f  mV' % snm, fontsize=14)
     ax.add_patch(patches.Rectangle((x[0], y[0]), width=edge, height=edge, fill=False))
