@@ -44,7 +44,9 @@ Vblneg BLneg 0 {vblneg}
 .PARAM e7=0.707  ; Batch instruction
 .PARAM e8=-0.707  ; Batch instruction
 .inc ../../../../../ltspice/utils/utils-montecarlo-experiments/RIT_Models_For_LTSPICE.txt
-.dc Vsweep -0.65 0.65 0.01
+.dc Vsweep -0.707 0.707 0.01
+.measure dc snm_max MAX(0.707*v(V1)-0.707*v(V2))
+.measure dc snm_min MIN(0.707*v(V1)-0.707*v(V2))
 .step param w_ax 0.12u 0.24u 0.01u
 .meas w_ax_values param w_ax
 .backanno

@@ -1,0 +1,2 @@
+.measure dc SNMMAX MAX(0.707*v(V1)-0.707*v(V2))
+.measure dc SNMMIN MIN(0.707*v(V1)-0.707*v(V2))

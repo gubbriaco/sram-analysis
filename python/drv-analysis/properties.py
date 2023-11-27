@@ -7,6 +7,11 @@ rit_models = f'.inc {rit_models_for_ltspice_file_path}'
 # rit-models-gaussian
 rit_models_montecarlo = f'.inc {rit_models_for_ltspice_montecarlo_file_path}'
 
+# snm-max and snm-min
+v_sweep_seevinck = 0.707
+snm_max = f'.measure dc snm_max MAX({v_sweep_seevinck}*v(V1)-{v_sweep_seevinck}*v(V2))'
+snm_min = f'.measure dc snm_min MIN({v_sweep_seevinck}*v(V1)-{v_sweep_seevinck}*v(V2))'
+
 
 ########################################################################################################################
 # SNM STANDARD
@@ -74,8 +79,8 @@ vdd_seevinck = '1'
 vsweep_seevinck = '1'
 
 # dc Vsweep
-dc_vsweep_start_seevinck = -0.650
-dc_vsweep_stop_seevinck = 0.650
+dc_vsweep_start_seevinck = -v_sweep_seevinck
+dc_vsweep_stop_seevinck = v_sweep_seevinck
 dc_vsweep_step_seevinck = 0.01
 dc_vsweep_seevinck = f'.dc Vsweep {dc_vsweep_start_seevinck} {dc_vsweep_stop_seevinck} {dc_vsweep_step_seevinck}'
 
@@ -121,8 +126,8 @@ vdd_gaussian_vth = '1'
 vsweep_gaussian_vth = '1'
 
 # dc Vsweep
-dc_vsweep_start_gaussian_vth = -0.650
-dc_vsweep_stop_gaussian_vth = 0.650
+dc_vsweep_start_gaussian_vth = -v_sweep_seevinck
+dc_vsweep_stop_gaussian_vth = v_sweep_seevinck
 dc_vsweep_step_gaussian_vth = 0.01
 dc_vsweep_gaussian_vth = f'.dc Vsweep {dc_vsweep_start_gaussian_vth} {dc_vsweep_stop_gaussian_vth} {dc_vsweep_step_gaussian_vth}'
 
