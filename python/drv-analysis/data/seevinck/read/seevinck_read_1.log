@@ -81,8 +81,8 @@ Measurement: w_ax_values
     13	2.4e-07
 
 
-Date: Wed Nov 29 18:13:30 2023
-Total elapsed time: 0.952 seconds.
+Date: Wed Nov 29 20:08:46 2023
+Total elapsed time: 0.743 seconds.
 
 tnom = 27
 temp = 27
@@ -96,6 +96,6 @@ matrix size = 33
 fillins = 28
 solver = Normal
 Avg thread counts: 7.0/0.0/8.0/7.0
-Matrix Compiler1: 2.14 KB object code size  0.9/0.6/[0.6]
-Matrix Compiler2: 2.78 KB object code size  0.4/0.7/[0.3]
+Matrix Compiler1: 2.14 KB object code size  1.0/0.6/[0.5]
+Matrix Compiler2: 2.78 KB object code size  0.4/0.7/[0.2]
 
