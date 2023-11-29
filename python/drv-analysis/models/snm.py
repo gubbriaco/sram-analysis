@@ -53,7 +53,7 @@ def standard_processing(x_vq, vq, x_vqneg, vqneg, ax, factor=100):
     ax.legend(["V(q)", "V(q_neg)"])
     ax.set_title("Standard Method and SNM")
 
-    return snm
+    return snm[0]
 
 
 def rotate_points(x, y, angle_degrees):
