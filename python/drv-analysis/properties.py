@@ -13,6 +13,15 @@ snm_max = f'.measure dc snm_max MAX({v_sweep_seevinck}*v(V1)-{v_sweep_seevinck}*
 snm_min = f'.measure dc snm_min MIN({v_sweep_seevinck}*v(V1)-{v_sweep_seevinck}*v(V2))'
 
 
+# vwl, vbl, vblneg
+vwl_hold = '0'
+vbl_hold = '1'
+vblneg_hold = '1'
+
+vwl_read = '1'
+vbl_read = '1'
+vblneg_read = '1'
+
 ########################################################################################################################
 # SNM STANDARD
 

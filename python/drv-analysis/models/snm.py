@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import patches
 from scipy.interpolate import interp1d
-from math import sqrt
+
 
 def standard_processing(x_vq, vq, x_vqneg, vqneg, ax, factor=100):
     x1 = np.linspace(np.min(x_vq), np.max(x_vq), len(vq) * int(factor))
@@ -38,9 +38,9 @@ def standard_processing(x_vq, vq, x_vqneg, vqneg, ax, factor=100):
     x, y = [x2[mask_index2], x1[mask_index1]], [y2[mask_index2], y1[mask_index1]]
     edge = np.sqrt(max_len / 2)
 
-    snm = edge
+    snm = 1000 * edge
 
-    ax.text(x[0] + edge + 0.05, y[0] + edge + 0.05, 'SNM= %.3f  mV' % snm, fontsize=14)
+    ax.text(x[0] + edge + 0.05, y[0] + edge + 0.05, 'SNM= %.3f mV' % snm, fontsize=14)
     ax.add_patch(patches.Rectangle((x[0], y[0]), width=edge, height=edge, fill=False))
     ax.plot([x[0], x[0] + edge], [y[0], y[0] + edge], 'k')
 
@@ -70,10 +70,10 @@ def draw_inscribable_square(height, width, ax):
     x_diff_snm_start, y_diff_snm_start = rotate_points(x_snm_start, y_snm_start, -45)
     x_diff_snm_stop, y_diff_snm_stop = rotate_points(x_snm_stop, y_snm_stop, -45)
     ax.plot([x_diff_snm_start, x_diff_snm_stop], [y_diff_snm_start, y_diff_snm_stop], 'k')
-    snm = (1/sqrt(2)) * height
-    ax.text(x_snm_start + 0.05, y_snm_start + 0.05, 'SNM= %.3f mV' % snm, fontsize=14)
+    snm = 1000 * height
+    # ax.text(x_snm_start + 0.05, y_snm_start + 0.05, 'SNM= %.3f mV' % snm, fontsize=14)
 
-    return snm
+    return snm, x_snm_start, y_snm_start
 
 
 def find_segments(samples):
