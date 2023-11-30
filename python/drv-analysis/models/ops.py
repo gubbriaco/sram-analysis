@@ -57,4 +57,4 @@ def save_image(image_path: str, plt: pyplot) -> None:
     check_image(image_path)
 
     # Salva l'immagine utilizzando l'oggetto pyplot
-    plt.savefig(image_path)
+    plt.savefig(image_path, format='png')
