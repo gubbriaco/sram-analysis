@@ -1226,8 +1226,8 @@ Measurement: snm_min
    400	-0.115841	-0.707	0.707
 
 
-Date: Thu Nov 30 23:52:37 2023
-Total elapsed time: 27.140 seconds.
+Date: Thu Nov 30 23:59:15 2023
+Total elapsed time: 27.596 seconds.
 
 tnom = 27
 temp = 27
@@ -1241,6 +1241,6 @@ matrix size = 33
 fillins = 28
 solver = Normal
 Avg thread counts: 6.9/0.0/8.0/6.9
-Matrix Compiler1: 2.14 KB object code size  0.7/0.4/[0.4]
+Matrix Compiler1: 2.14 KB object code size  0.6/0.5/[0.3]
 Matrix Compiler2: 2.78 KB object code size  0.3/0.5/[0.2]
 
