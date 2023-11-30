@@ -110,7 +110,7 @@ e8_seevinck = '-0.707'
 
 # AX
 l_ax_gaussian_vth = '0.12u'
-w_ax_gaussian_vth = '0.24u'
+w_ax_gaussian_vth = '0.13u'
 w_ax_start_gaussian_vth = '0.12u'
 w_ax_stop_gaussian_vth = '0.24u'
 w_ax_step_gaussian_vth = '0.01u'

@@ -22,7 +22,7 @@ Vblneg BLneg 0 {vblneg}
 .model PMOS PMOS
 .lib C:\Users\giorg\AppData\Local\LTspice\lib\cmp\standard.mos
 .PARAM l_ax=0.12u  ; Batch instruction
-.PARAM w_ax=0.24u  ; Batch instruction
+.PARAM w_ax=0.13u  ; Batch instruction
 .PARAM l_pmos_q=0.12u  ; Batch instruction
 .PARAM w_pmos_q=0.12u  ; Batch instruction
 .PARAM l_nmos_q=0.12u  ; Batch instruction
