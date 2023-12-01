@@ -11,17 +11,16 @@ from properties import rit_models, l_ax_standard, w_ax_step_param_standard, save
 from properties import snm_max, snm_min
 from properties import l_ax_seevinck, w_ax_step_param_seevinck, save_w_ax_seevinck, l_pmos_q_seevinck, \
     w_pmos_q_seevinck, l_nmos_q_seevinck, w_nmos_q_seevinck, l_pmos_q_neg_seevinck, w_pmos_q_neg_seevinck, \
-    l_nmos_q_neg_seevinck, w_nmos_q_neg_seevinck, dc_vsweep_seevinck, vdd_seevinck, vsweep_seevinck, e1_seevinck, \
+    l_nmos_q_neg_seevinck, w_nmos_q_neg_seevinck, dc_vsweep_seevinck, vsweep_seevinck, e1_seevinck, \
     e2_seevinck, e3_seevinck, e4_seevinck, e5_seevinck, e6_seevinck, e7_seevinck, e8_seevinck
 from properties import rit_models_montecarlo, l_ax_gaussian_vth, l_pmos_q_gaussian_vth, w_pmos_q_gaussian_vth, \
     l_nmos_q_gaussian_vth, w_nmos_q_gaussian_vth, l_pmos_q_neg_gaussian_vth, w_pmos_q_neg_gaussian_vth, \
-    l_nmos_q_neg_gaussian_vth, w_nmos_q_neg_gaussian_vth, dc_vsweep_gaussian_vth, vdd_gaussian_vth, vsweep_gaussian_vth, \
+    l_nmos_q_neg_gaussian_vth, w_nmos_q_neg_gaussian_vth, dc_vsweep_gaussian_vth, vsweep_gaussian_vth, \
     e1_gaussian_vth, e2_gaussian_vth, e3_gaussian_vth, e4_gaussian_vth, e5_gaussian_vth, e6_gaussian_vth, \
     e7_gaussian_vth, e8_gaussian_vth, step_param_run_gaussian_vth, w_ax_gaussian_vth
-from utils.path import ltspice, schematics, data
+from utils.path import data
 import re
 from PyLTSpice import SimRunner
-import os
 
 
 def load_asc(asc_file_path: str, schematic_image_path: str) -> SpiceEditor:
@@ -128,6 +127,7 @@ def __init_model__(
     else:
         raise ValueError()
 
+    steps = []
     x = []
     vq = []
     vqneg = []
@@ -290,4 +290,55 @@ def __init_gaussian_vth__(
         vbl: float,
         vblneg: float
 ) -> tuple[list[int], np.ndarray, np.ndarray, np.ndarray, str]:
-    return
+    gaussian_vth_netlist = load_asc(
+        asc_file_path=asc_file_path,
+        schematic_image_path=schematic_image_path
+    )
+    gaussian_vth_netlist.set_parameter('l_ax', l_ax_gaussian_vth)
+    gaussian_vth_netlist.set_parameter('w_ax', w_ax_gaussian_vth)
+    gaussian_vth_netlist.set_parameter('l_pmos_q', l_pmos_q_gaussian_vth)
+    gaussian_vth_netlist.set_parameter('w_pmos_q', w_pmos_q_gaussian_vth)
+    gaussian_vth_netlist.set_parameter('l_nmos_q', l_nmos_q_gaussian_vth)
+    gaussian_vth_netlist.set_parameter('w_nmos_q', w_nmos_q_gaussian_vth)
+    gaussian_vth_netlist.set_parameter('l_pmos_q_neg', l_pmos_q_neg_gaussian_vth)
+    gaussian_vth_netlist.set_parameter('w_pmos_q_neg', w_pmos_q_neg_gaussian_vth)
+    gaussian_vth_netlist.set_parameter('l_nmos_q_neg', l_nmos_q_neg_gaussian_vth)
+    gaussian_vth_netlist.set_parameter('w_nmos_q_neg', w_nmos_q_neg_gaussian_vth)
+    gaussian_vth_netlist.set_parameter('vdd', vdd)
+    gaussian_vth_netlist.set_parameter('vwl', vwl)
+    gaussian_vth_netlist.set_parameter('vbl', vbl)
+    gaussian_vth_netlist.set_parameter('vblneg', vblneg)
+    gaussian_vth_netlist.set_parameter('vsweep', vsweep_gaussian_vth)
+    gaussian_vth_netlist.set_parameter('e1', e1_gaussian_vth)
+    gaussian_vth_netlist.set_parameter('e2', e2_gaussian_vth)
+    gaussian_vth_netlist.set_parameter('e3', e3_gaussian_vth)
+    gaussian_vth_netlist.set_parameter('e4', e4_gaussian_vth)
+    gaussian_vth_netlist.set_parameter('e5', e5_gaussian_vth)
+    gaussian_vth_netlist.set_parameter('e6', e6_gaussian_vth)
+    gaussian_vth_netlist.set_parameter('e7', e7_gaussian_vth)
+    gaussian_vth_netlist.set_parameter('e8', e8_gaussian_vth)
+    gaussian_vth_netlist.add_instructions(
+        rit_models_montecarlo,
+        dc_vsweep_gaussian_vth,
+        step_param_run_gaussian_vth,
+        snm_max,
+        snm_min
+    )
+    gaussian_vth_runner = SimRunner(output_folder=f"{data}/gaussian-vth/{operation}/")
+    gaussian_vth_runner.run(netlist=gaussian_vth_netlist, timeout=3600)
+    print('Successful/Total Simulations: ' + str(gaussian_vth_runner.okSim) + '/' + str(
+        gaussian_vth_runner.runno))
+
+    gaussian_vth_raw = ""
+    gaussian_vth_log = ""
+    for gaussian_vth_raw, gaussian_vth_log in gaussian_vth_runner:
+        print("Raw file: %s, Log file: %s" % (gaussian_vth_raw, gaussian_vth_log))
+
+    gaussian_vth_ltr = load_ltr(raw_file_path=gaussian_vth_raw)
+    v_1_gaussian_vth = gaussian_vth_ltr.get_trace("V(v1)")
+    v_2_gaussian_vth = gaussian_vth_ltr.get_trace("V(v2)")
+    v_sweep_gaussian_vth = gaussian_vth_ltr.get_trace('vsweep')
+    steps = gaussian_vth_ltr.get_steps()
+
+    log = gaussian_vth_log
+    return steps, v_sweep_gaussian_vth, v_1_gaussian_vth, v_2_gaussian_vth, log
