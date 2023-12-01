@@ -1,6 +1,5 @@
 from utils.path import rit_models_for_ltspice_file_path, rit_models_for_ltspice_montecarlo_file_path
 
-
 # rit-models
 rit_models = f'.inc {rit_models_for_ltspice_file_path}'
 
@@ -9,9 +8,12 @@ rit_models_montecarlo = f'.inc {rit_models_for_ltspice_montecarlo_file_path}'
 
 # snm-max and snm-min
 v_sweep_seevinck = 0.707
-snm_max = f'.measure dc snm_max MAX({v_sweep_seevinck}*v(V1)-{v_sweep_seevinck}*v(V2))'
-snm_min = f'.measure dc snm_min MIN({v_sweep_seevinck}*v(V1)-{v_sweep_seevinck}*v(V2))'
-
+def snm_max(v_sweep):
+    return f'.measure dc snm_max MAX({v_sweep}*v(V1)-{v_sweep}*v(V2))'
+def snm_min(v_sweep):
+    return f'.measure dc snm_min MIN({v_sweep}*v(V1)-{v_sweep}*v(V2))'
+# snm_max = f'.measure dc snm_max MAX({v_sweep_seevinck}*v(V1)-{v_sweep_seevinck}*v(V2))'
+# snm_min = f'.measure dc snm_min MIN({v_sweep_seevinck}*v(V1)-{v_sweep_seevinck}*v(V2))'
 
 # vwl, vbl, vblneg
 vwl_hold = '0'
@@ -21,7 +23,6 @@ vblneg_hold = '1'
 vwl_read = '1'
 vbl_read = '1'
 vblneg_read = '1'
-
 
 ########################################################################################################################
 # SNM STANDARD
@@ -57,7 +58,6 @@ dc_vsweep_start_standard = 0
 dc_vsweep_stop_standard = 1
 dc_vsweep_step_standard = 0.01
 dc_vsweep_standard = f'.dc Vsweep {dc_vsweep_start_standard} {dc_vsweep_stop_standard} {dc_vsweep_step_standard}'
-
 
 ########################################################################################################################
 # SNM SEEVINCK
@@ -108,6 +108,16 @@ e8_seevinck = '-0.707'
 ########################################################################################################################
 # GAUSSIAN-VTH
 
+# i-leak-n
+def i_leak_n(v: str) -> str:
+    return f'.measure tran I-leak-N FIND i({v}) AT=0n'
+
+
+# i-leak-p
+def i_leak_p(v: str) -> str:
+    return f'.measure tran I-leak-P FIND i({v}) AT=18n'
+
+
 # AX
 l_ax_gaussian_vth = '0.12u'
 w_ax_gaussian_vth = '0.13u'
@@ -136,10 +146,12 @@ vdd_gaussian_vth = '1'
 vsweep_gaussian_vth = '1'
 
 # dc Vsweep
-dc_vsweep_start_gaussian_vth = -v_sweep_seevinck
-dc_vsweep_stop_gaussian_vth = v_sweep_seevinck
-dc_vsweep_step_gaussian_vth = 0.01
-dc_vsweep_gaussian_vth = f'.dc Vsweep {dc_vsweep_start_gaussian_vth} {dc_vsweep_stop_gaussian_vth} {dc_vsweep_step_gaussian_vth}'
+# dc_vsweep_start_gaussian_vth = -v_sweep_seevinck
+# dc_vsweep_stop_gaussian_vth = v_sweep_seevinck
+# dc_vsweep_step_gaussian_vth = 0.01
+def dc_vsweep_gaussian_vth(dc_vsweep_start_gaussian_vth, dc_vsweep_stop_gaussian_vth, dc_vsweep_step_gaussian_vth):
+    return f'.dc Vsweep {dc_vsweep_start_gaussian_vth} {dc_vsweep_stop_gaussian_vth} {dc_vsweep_step_gaussian_vth}'
+#dc_vsweep_gaussian_vth = f'.dc Vsweep {dc_vsweep_start_gaussian_vth} {dc_vsweep_stop_gaussian_vth} {dc_vsweep_step_gaussian_vth}'
 
 # E1 E2 E3 E4 E5 E6 E7 E8
 e1_gaussian_vth = '0.707'

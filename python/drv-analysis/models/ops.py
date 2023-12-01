@@ -39,7 +39,7 @@ def load_asc(asc_file_path: str, schematic_image_path: str) -> SpiceEditor:
     netlist = SpiceEditor(asc_file_path)
 
     # Visualizza l'immagine dello schema
-    display(Image(schematic_image_path))
+    # display(Image(schematic_image_path))
 
     # Restituisci l'oggetto SpiceEditor contenente la netlist
     return netlist
@@ -102,10 +102,12 @@ def __init_model__(
         circuit_type: CircuitType,
         asc_file_path: str,
         schematic_image_path: str,
-        vdd: float,
-        vwl: float,
-        vbl: float,
-        vblneg: float
+        vdd: str,
+        vsweep: str,
+        vwl: str,
+        vbl: str,
+        vblneg: str,
+        params: list[str]
 ) -> tuple[list[int], np.ndarray, np.ndarray, np.ndarray, str]:
     """
     Salva un'immagine utilizzando il percorso specificato e un oggetto pyplot di matplotlib.
@@ -138,9 +140,11 @@ def __init_model__(
             asc_file_path=asc_file_path,
             schematic_image_path=schematic_image_path,
             vdd=vdd,
+            vsweep=vsweep,
             vwl=vwl,
             vbl=vbl,
-            vblneg=vblneg
+            vblneg=vblneg,
+            params=params
         )
     elif circuit_type == CircuitType.SEEVINCK:
         steps, x, vq, vqneg, log = __init_seevinck__(
@@ -148,9 +152,11 @@ def __init_model__(
             asc_file_path=asc_file_path,
             schematic_image_path=schematic_image_path,
             vdd=vdd,
+            vsweep=vsweep,
             vwl=vwl,
             vbl=vbl,
-            vblneg=vblneg
+            vblneg=vblneg,
+            params=params
         )
     elif circuit_type == CircuitType.GAUSSIAN_VTH:
         steps, x, vq, vqneg, log = __init_gaussian_vth__(
@@ -158,9 +164,11 @@ def __init_model__(
             asc_file_path=asc_file_path,
             schematic_image_path=schematic_image_path,
             vdd=vdd,
+            vsweep=vsweep,
             vwl=vwl,
             vbl=vbl,
-            vblneg=vblneg
+            vblneg=vblneg,
+            params=params
         )
     else:
         raise ValueError()
@@ -172,10 +180,12 @@ def __init_standard__(
         operation: str,
         asc_file_path: str,
         schematic_image_path: str,
-        vdd: float,
-        vwl: float,
-        vbl: float,
-        vblneg: float
+        vdd: str,
+        vsweep: str,
+        vwl: str,
+        vbl: str,
+        vblneg: str,
+        params: list[str]
 ) -> tuple[list[int], np.ndarray, np.ndarray, np.ndarray, str]:
     standard_netlist = load_asc(
         asc_file_path=asc_file_path,
@@ -194,13 +204,10 @@ def __init_standard__(
     standard_netlist.set_parameter('vwl', vwl)
     standard_netlist.set_parameter('vbl', vbl)
     standard_netlist.set_parameter('vblneg', vblneg)
-    standard_netlist.set_parameter('vsweep', vsweep_standard)
-    standard_netlist.add_instructions(
-        rit_models,
-        dc_vsweep_standard,
-        w_ax_step_param_standard,
-        save_w_ax_standard
-    )
+    standard_netlist.set_parameter('vsweep', vsweep)
+    for param in params:
+        standard_netlist.add_instructions(param)
+
     standard_runner = SimRunner(output_folder=f"{data}/standard/{operation}/")
     standard_runner.run(netlist=standard_netlist, timeout=3600)
     print('Successful/Total Simulations: ' + str(standard_runner.okSim) + '/' + str(standard_runner.runno))
@@ -224,10 +231,12 @@ def __init_seevinck__(
         operation: str,
         asc_file_path: str,
         schematic_image_path: str,
-        vdd: float,
-        vwl: float,
-        vbl: float,
-        vblneg: float
+        vdd: str,
+        vsweep: str,
+        vwl: str,
+        vbl: str,
+        vblneg: str,
+        params: list[str]
 ) -> tuple[list[int], np.ndarray, np.ndarray, np.ndarray, str]:
     seevinck_netlist = load_asc(
         asc_file_path=asc_file_path,
@@ -246,7 +255,7 @@ def __init_seevinck__(
     seevinck_netlist.set_parameter('vwl', vwl)
     seevinck_netlist.set_parameter('vbl', vbl)
     seevinck_netlist.set_parameter('vblneg', vblneg)
-    seevinck_netlist.set_parameter('vsweep', vsweep_seevinck)
+    seevinck_netlist.set_parameter('vsweep', vsweep)
     seevinck_netlist.set_parameter('e1', e1_seevinck)
     seevinck_netlist.set_parameter('e2', e2_seevinck)
     seevinck_netlist.set_parameter('e3', e3_seevinck)
@@ -255,14 +264,9 @@ def __init_seevinck__(
     seevinck_netlist.set_parameter('e6', e6_seevinck)
     seevinck_netlist.set_parameter('e7', e7_seevinck)
     seevinck_netlist.set_parameter('e8', e8_seevinck)
-    seevinck_netlist.add_instructions(
-        rit_models,
-        dc_vsweep_seevinck,
-        snm_max,
-        snm_min,
-        w_ax_step_param_seevinck,
-        save_w_ax_seevinck
-    )
+    for param in params:
+        seevinck_netlist.add_instructions(param)
+
     seevinck_runner = SimRunner(output_folder=f"{data}/seevinck/{operation}/")
     seevinck_runner.run(netlist=seevinck_netlist, timeout=3600)
     print('Successful/Total Simulations: ' + str(seevinck_runner.okSim) + '/' + str(seevinck_runner.runno))
@@ -285,10 +289,12 @@ def __init_gaussian_vth__(
         operation: str,
         asc_file_path: str,
         schematic_image_path: str,
-        vdd: float,
-        vwl: float,
-        vbl: float,
-        vblneg: float
+        vdd: str,
+        vsweep: str,
+        vwl: str,
+        vbl: str,
+        vblneg: str,
+        params: list[str]
 ) -> tuple[list[int], np.ndarray, np.ndarray, np.ndarray, str]:
     gaussian_vth_netlist = load_asc(
         asc_file_path=asc_file_path,
@@ -308,7 +314,7 @@ def __init_gaussian_vth__(
     gaussian_vth_netlist.set_parameter('vwl', vwl)
     gaussian_vth_netlist.set_parameter('vbl', vbl)
     gaussian_vth_netlist.set_parameter('vblneg', vblneg)
-    gaussian_vth_netlist.set_parameter('vsweep', vsweep_gaussian_vth)
+    gaussian_vth_netlist.set_parameter('vsweep', vsweep)
     gaussian_vth_netlist.set_parameter('e1', e1_gaussian_vth)
     gaussian_vth_netlist.set_parameter('e2', e2_gaussian_vth)
     gaussian_vth_netlist.set_parameter('e3', e3_gaussian_vth)
@@ -317,13 +323,9 @@ def __init_gaussian_vth__(
     gaussian_vth_netlist.set_parameter('e6', e6_gaussian_vth)
     gaussian_vth_netlist.set_parameter('e7', e7_gaussian_vth)
     gaussian_vth_netlist.set_parameter('e8', e8_gaussian_vth)
-    gaussian_vth_netlist.add_instructions(
-        rit_models_montecarlo,
-        dc_vsweep_gaussian_vth,
-        step_param_run_gaussian_vth,
-        snm_max,
-        snm_min
-    )
+    for param in params:
+        gaussian_vth_netlist.add_instructions(param)
+
     gaussian_vth_runner = SimRunner(output_folder=f"{data}/gaussian-vth/{operation}/")
     gaussian_vth_runner.run(netlist=gaussian_vth_netlist, timeout=3600)
     print('Successful/Total Simulations: ' + str(gaussian_vth_runner.okSim) + '/' + str(
