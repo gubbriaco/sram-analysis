@@ -1,0 +1,1 @@
+.measure tran I-leak-N FIND i(Vsupply) AT=0n

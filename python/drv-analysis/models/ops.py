@@ -1,7 +1,27 @@
+import numpy as np
+
 from utils.check import check_file, check_image
 from PyLTSpice import RawRead, SpiceEditor
 from IPython.display import Image, display
 from matplotlib import pyplot
+from enum import Enum
+from properties import rit_models, l_ax_standard, w_ax_step_param_standard, save_w_ax_standard, l_pmos_q_standard, \
+    w_pmos_q_standard, l_nmos_q_standard, w_nmos_q_standard, l_pmos_q_neg_standard, w_pmos_q_neg_standard, \
+    l_nmos_q_neg_standard, w_nmos_q_neg_standard, dc_vsweep_standard, vsweep_standard
+from properties import snm_max, snm_min
+from properties import l_ax_seevinck, w_ax_step_param_seevinck, save_w_ax_seevinck, l_pmos_q_seevinck, \
+    w_pmos_q_seevinck, l_nmos_q_seevinck, w_nmos_q_seevinck, l_pmos_q_neg_seevinck, w_pmos_q_neg_seevinck, \
+    l_nmos_q_neg_seevinck, w_nmos_q_neg_seevinck, dc_vsweep_seevinck, vdd_seevinck, vsweep_seevinck, e1_seevinck, \
+    e2_seevinck, e3_seevinck, e4_seevinck, e5_seevinck, e6_seevinck, e7_seevinck, e8_seevinck
+from properties import rit_models_montecarlo, l_ax_gaussian_vth, l_pmos_q_gaussian_vth, w_pmos_q_gaussian_vth, \
+    l_nmos_q_gaussian_vth, w_nmos_q_gaussian_vth, l_pmos_q_neg_gaussian_vth, w_pmos_q_neg_gaussian_vth, \
+    l_nmos_q_neg_gaussian_vth, w_nmos_q_neg_gaussian_vth, dc_vsweep_gaussian_vth, vdd_gaussian_vth, vsweep_gaussian_vth, \
+    e1_gaussian_vth, e2_gaussian_vth, e3_gaussian_vth, e4_gaussian_vth, e5_gaussian_vth, e6_gaussian_vth, \
+    e7_gaussian_vth, e8_gaussian_vth, step_param_run_gaussian_vth, w_ax_gaussian_vth
+from utils.path import ltspice, schematics, data
+import re
+from PyLTSpice import SimRunner
+import os
 
 
 def load_asc(asc_file_path: str, schematic_image_path: str) -> SpiceEditor:
@@ -58,3 +78,216 @@ def save_image(image_path: str, plt: pyplot) -> None:
 
     # Salva l'immagine utilizzando l'oggetto pyplot
     plt.savefig(image_path, format='png')
+
+
+def get_data(pattern: str, content: str) -> list[float]:
+    content_data = re.search(pattern, content, re.DOTALL).group(1)
+    lines = content_data.strip().split('\n')[1:]
+    data = [float(line.split('\t')[1]) for line in lines]
+    return data
+
+
+class CircuitType(Enum):
+    STANDARD = 0
+    SEEVINCK = 1
+    GAUSSIAN_VTH = 2
+
+
+class OperationType(Enum):
+    HOLD = 0
+    READ = 1
+
+
+def __init_model__(
+        operation_type: OperationType,
+        circuit_type: CircuitType,
+        asc_file_path: str,
+        schematic_image_path: str,
+        vdd: float,
+        vwl: float,
+        vbl: float,
+        vblneg: float
+) -> tuple[list[int], np.ndarray, np.ndarray, np.ndarray, str]:
+    """
+    Salva un'immagine utilizzando il percorso specificato e un oggetto pyplot di matplotlib.
+
+    :param circuit_type: CircuitType
+    :param asc_file_path: str
+    :param schematic_image_path: str
+    :param vdd: float
+    :param vwl: float
+    :param vbl: float
+    :param vblneg: float
+    :return: x, vq, vqneg, log
+    """
+
+    if operation_type == OperationType.HOLD:
+        operation = "hold"
+    elif operation_type == OperationType.READ:
+        operation = "read"
+    else:
+        raise ValueError()
+
+    x = []
+    vq = []
+    vqneg = []
+    log = ""
+    if circuit_type == CircuitType.STANDARD:
+        steps, x, vq, vqneg, log = __init_standard__(
+            operation=operation,
+            asc_file_path=asc_file_path,
+            schematic_image_path=schematic_image_path,
+            vdd=vdd,
+            vwl=vwl,
+            vbl=vbl,
+            vblneg=vblneg
+        )
+    elif circuit_type == CircuitType.SEEVINCK:
+        steps, x, vq, vqneg, log = __init_seevinck__(
+            operation=operation,
+            asc_file_path=asc_file_path,
+            schematic_image_path=schematic_image_path,
+            vdd=vdd,
+            vwl=vwl,
+            vbl=vbl,
+            vblneg=vblneg
+        )
+    elif circuit_type == CircuitType.GAUSSIAN_VTH:
+        steps, x, vq, vqneg, log = __init_gaussian_vth__(
+            operation=operation,
+            asc_file_path=asc_file_path,
+            schematic_image_path=schematic_image_path,
+            vdd=vdd,
+            vwl=vwl,
+            vbl=vbl,
+            vblneg=vblneg
+        )
+    else:
+        raise ValueError()
+
+    return steps, x, vq, vqneg, log
+
+
+def __init_standard__(
+        operation: str,
+        asc_file_path: str,
+        schematic_image_path: str,
+        vdd: float,
+        vwl: float,
+        vbl: float,
+        vblneg: float
+) -> tuple[list[int], np.ndarray, np.ndarray, np.ndarray, str]:
+    standard_netlist = load_asc(
+        asc_file_path=asc_file_path,
+        schematic_image_path=schematic_image_path
+    )
+    standard_netlist.set_parameter('l_ax', l_ax_standard)
+    standard_netlist.set_parameter('l_pmos_q', l_pmos_q_standard)
+    standard_netlist.set_parameter('w_pmos_q', w_pmos_q_standard)
+    standard_netlist.set_parameter('l_nmos_q', l_nmos_q_standard)
+    standard_netlist.set_parameter('w_nmos_q', w_nmos_q_standard)
+    standard_netlist.set_parameter('l_pmos_q_neg', l_pmos_q_neg_standard)
+    standard_netlist.set_parameter('w_pmos_q_neg', w_pmos_q_neg_standard)
+    standard_netlist.set_parameter('l_nmos_q_neg', l_nmos_q_neg_standard)
+    standard_netlist.set_parameter('w_nmos_q_neg', w_nmos_q_neg_standard)
+    standard_netlist.set_parameter('vdd', vdd)
+    standard_netlist.set_parameter('vwl', vwl)
+    standard_netlist.set_parameter('vbl', vbl)
+    standard_netlist.set_parameter('vblneg', vblneg)
+    standard_netlist.set_parameter('vsweep', vsweep_standard)
+    standard_netlist.add_instructions(
+        rit_models,
+        dc_vsweep_standard,
+        w_ax_step_param_standard,
+        save_w_ax_standard
+    )
+    standard_runner = SimRunner(output_folder=f"{data}/standard/{operation}/")
+    standard_runner.run(netlist=standard_netlist, timeout=3600)
+    print('Successful/Total Simulations: ' + str(standard_runner.okSim) + '/' + str(standard_runner.runno))
+
+    standard_raw = ""
+    standard_log = ""
+    for standard_raw, standard_log in standard_runner:
+        print("Raw file: %s, Log file: %s" % (standard_raw, standard_log))
+
+    standard_ltr = load_ltr(raw_file_path=standard_raw)
+    v_q_standard = standard_ltr.get_trace("V(q)")
+    v_sweep_standard = standard_ltr.get_trace('vsweep')
+    steps = standard_ltr.get_steps()
+
+    v_q_neg_standard = v_sweep_standard
+    log = standard_log
+    return steps, v_sweep_standard, v_q_standard, v_q_neg_standard, log
+
+
+def __init_seevinck__(
+        operation: str,
+        asc_file_path: str,
+        schematic_image_path: str,
+        vdd: float,
+        vwl: float,
+        vbl: float,
+        vblneg: float
+) -> tuple[list[int], np.ndarray, np.ndarray, np.ndarray, str]:
+    seevinck_netlist = load_asc(
+        asc_file_path=asc_file_path,
+        schematic_image_path=schematic_image_path
+    )
+    seevinck_netlist.set_parameter('l_ax', l_ax_seevinck)
+    seevinck_netlist.set_parameter('l_pmos_q', l_pmos_q_seevinck)
+    seevinck_netlist.set_parameter('w_pmos_q', w_pmos_q_seevinck)
+    seevinck_netlist.set_parameter('l_nmos_q', l_nmos_q_seevinck)
+    seevinck_netlist.set_parameter('w_nmos_q', w_nmos_q_seevinck)
+    seevinck_netlist.set_parameter('l_pmos_q_neg', l_pmos_q_neg_seevinck)
+    seevinck_netlist.set_parameter('w_pmos_q_neg', w_pmos_q_neg_seevinck)
+    seevinck_netlist.set_parameter('l_nmos_q_neg', l_nmos_q_neg_seevinck)
+    seevinck_netlist.set_parameter('w_nmos_q_neg', w_nmos_q_neg_seevinck)
+    seevinck_netlist.set_parameter('vdd', vdd)
+    seevinck_netlist.set_parameter('vwl', vwl)
+    seevinck_netlist.set_parameter('vbl', vbl)
+    seevinck_netlist.set_parameter('vblneg', vblneg)
+    seevinck_netlist.set_parameter('vsweep', vsweep_seevinck)
+    seevinck_netlist.set_parameter('e1', e1_seevinck)
+    seevinck_netlist.set_parameter('e2', e2_seevinck)
+    seevinck_netlist.set_parameter('e3', e3_seevinck)
+    seevinck_netlist.set_parameter('e4', e4_seevinck)
+    seevinck_netlist.set_parameter('e5', e5_seevinck)
+    seevinck_netlist.set_parameter('e6', e6_seevinck)
+    seevinck_netlist.set_parameter('e7', e7_seevinck)
+    seevinck_netlist.set_parameter('e8', e8_seevinck)
+    seevinck_netlist.add_instructions(
+        rit_models,
+        dc_vsweep_seevinck,
+        snm_max,
+        snm_min,
+        w_ax_step_param_seevinck,
+        save_w_ax_seevinck
+    )
+    seevinck_runner = SimRunner(output_folder=f"{data}/seevinck/{operation}/")
+    seevinck_runner.run(netlist=seevinck_netlist, timeout=3600)
+    print('Successful/Total Simulations: ' + str(seevinck_runner.okSim) + '/' + str(seevinck_runner.runno))
+
+    seevinck_raw = ""
+    seevinck_log = ""
+    for seevinck_raw, seevinck_log in seevinck_runner:
+        print("Raw file: %s, Log file: %s" % (seevinck_raw, seevinck_log))
+
+    seevinck_ltr = load_ltr(raw_file_path=seevinck_raw)
+    v_1_seevinck = seevinck_ltr.get_trace("V(v1)")
+    v_2_seevinck = seevinck_ltr.get_trace("V(v2)")
+    v_sweep_seevinck = seevinck_ltr.get_trace('vsweep')
+    steps = seevinck_ltr.get_steps()
+    log = seevinck_log
+    return steps, v_sweep_seevinck, v_1_seevinck, v_2_seevinck, log
+
+
+def __init_gaussian_vth__(
+        operation: str,
+        asc_file_path: str,
+        schematic_image_path: str,
+        vdd: float,
+        vwl: float,
+        vbl: float,
+        vblneg: float
+) -> tuple[list[int], np.ndarray, np.ndarray, np.ndarray, str]:
+    return
