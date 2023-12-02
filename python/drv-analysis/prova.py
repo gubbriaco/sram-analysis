@@ -1,44 +1,37 @@
-from PyLTSpice import RawRead, SpiceEditor
-from PyLTSpice import SimRunner
+import math
 
+import matplotlib.pyplot as plt
+import numpy as np
 
-def load_asc(asc_file_path):
-    netlist = SpiceEditor(asc_file_path)
-    return netlist
-
-
-def load_ltr(raw_file_path):
-    ltr = RawRead(raw_file_path)
-    return ltr
-
-
-minimum_inverter_sizing_analysis_netlist = load_asc(
-    asc_file_path="C:/Users/fremb/Downloads/minimum_inverter_connected.asc"
-)
-minimum_inverter_sizing_analysis_netlist.set_parameter('l_min_pmos', "0.12u")
-minimum_inverter_sizing_analysis_netlist.set_parameter('l_min_nmos', "0.12u")
-minimum_inverter_sizing_analysis_netlist.set_parameter('w_min_nmos', "0.24u")
-minimum_inverter_sizing_analysis_netlist.add_instructions(".inc C:/Users/fremb/OneDrive/Desktop/Hardware and Software Codesign/Progettazione low power/Elaborato1/RIT_Models_For_LTSPICE.txt"
-)
-minimum_inverter_sizing_analysis_runner = SimRunner(output_folder="C:/Users/fremb/Desktop")
-minimum_inverter_sizing_analysis_runner.run(netlist=minimum_inverter_sizing_analysis_netlist, timeout=3600)
-print('Successful/Total Simulations: ' + str(minimum_inverter_sizing_analysis_runner.okSim) + '/' + str(
-    minimum_inverter_sizing_analysis_runner.runno))
-
-minimum_inverter_sizing_analysis_raw = ""
-minimum_inverter_sizing_analysis_log = ""
-for minimum_inverter_sizing_analysis_raw, minimum_inverter_sizing_analysis_log in minimum_inverter_sizing_analysis_runner:
-    print("Raw file: %s, Log file: %s" % (minimum_inverter_sizing_analysis_raw, minimum_inverter_sizing_analysis_log))
-
-minimum_inverter_sizing_analysis_ltr = load_ltr(raw_file_path=minimum_inverter_sizing_analysis_raw)
-v_in_minimum_inverter_sizing_analysis = minimum_inverter_sizing_analysis_ltr.get_trace("V(in)")
-v_out_minimum_inverter_sizing_analysis = minimum_inverter_sizing_analysis_ltr.get_trace("V(out)")
-v_supply_minimum_inverter_sizing_analysis = minimum_inverter_sizing_analysis_ltr.get_trace("V(supply)")
-time = minimum_inverter_sizing_analysis_ltr.get_trace('time')
-steps = minimum_inverter_sizing_analysis_ltr.get_steps()
-
-
-minimum_inverter_sizing_analysis_log_file_path = f"./{minimum_inverter_sizing_analysis_log}"
-
-with open(minimum_inverter_sizing_analysis_log_file_path, "r") as file:
-    content = file.read()
+iterations_scaling = 12
+rows = round(int(np.sqrt(iterations_scaling)))
+tmp = iterations_scaling % rows
+iterations = iterations_scaling
+if tmp == 1:
+    iterations = iterations_scaling + (rows-1)
+elif tmp == 2:
+    iterations = iterations_scaling + (rows-2)
+cols = int(iterations / rows)
+fig, axs = plt.subplots(rows, cols, figsize=(16, 6))
+fig, axs = plt.subplots(rows, cols, figsize=(16, 6))
+vdd_start = 1.0
+vdd_stop = vdd_start - (iterations * 0.1)
+vdd_step = 0.05
+print('VDD Scaling Initialised')
+row = 0
+col = 0
+for scaling in np.arange(vdd_start, vdd_stop, -vdd_step):
+    if row == rows:
+        break
+    vdd_scaled = round(scaling, 2)
+    axs[row, col].hist(math.sin(0.3), bins=100, edgecolor='black')
+    axs[row, col].set_xlabel("SNM(HOLD)")
+    axs[row, col].set_ylabel("#")
+    axs[row, col].set_title(f"vdd={vdd_scaled} V Histogram")
+    if col == (cols-1):
+        row = row + 1
+        col = 0
+    else:
+        col = col + 1
+plt.subplots_adjust(hspace=1, wspace=1)
+plt.show()
