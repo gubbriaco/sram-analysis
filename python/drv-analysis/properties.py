@@ -153,6 +153,8 @@ def dc_vsweep_gaussian_vth(dc_vsweep_start_gaussian_vth, dc_vsweep_stop_gaussian
     return f'.dc Vsweep {dc_vsweep_start_gaussian_vth} {dc_vsweep_stop_gaussian_vth} {dc_vsweep_step_gaussian_vth}'
 #dc_vsweep_gaussian_vth = f'.dc Vsweep {dc_vsweep_start_gaussian_vth} {dc_vsweep_stop_gaussian_vth} {dc_vsweep_step_gaussian_vth}'
 
+tran_gaussian_vth = ".tran 0 50n 0"
+
 # E1 E2 E3 E4 E5 E6 E7 E8
 e1_gaussian_vth = '0.707'
 e2_gaussian_vth = '0.707'

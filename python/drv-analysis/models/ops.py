@@ -108,7 +108,7 @@ def __init_model__(
         vbl: str,
         vblneg: str,
         params: list[str]
-) -> tuple[list[int], np.ndarray, np.ndarray, np.ndarray, str]:
+) -> tuple[list[int], np.ndarray, list[np.ndarray], np.ndarray, np.ndarray, str]:
     """
     Salva un'immagine utilizzando il percorso specificato e un oggetto pyplot di matplotlib.
 
@@ -119,7 +119,7 @@ def __init_model__(
     :param vwl: float
     :param vbl: float
     :param vblneg: float
-    :return: x, vq, vqneg, log
+    :return: x, ileaks, vq, vqneg, log
     """
 
     if operation_type == OperationType.HOLD:
@@ -131,11 +131,12 @@ def __init_model__(
 
     steps = []
     x = []
+    ileaks = []
     vq = []
     vqneg = []
     log = ""
     if circuit_type == CircuitType.STANDARD:
-        steps, x, vq, vqneg, log = __init_standard__(
+        steps, x, ileaks, vq, vqneg, log = __init_standard__(
             operation=operation,
             asc_file_path=asc_file_path,
             schematic_image_path=schematic_image_path,
@@ -147,7 +148,7 @@ def __init_model__(
             params=params
         )
     elif circuit_type == CircuitType.SEEVINCK:
-        steps, x, vq, vqneg, log = __init_seevinck__(
+        steps, x, ileaks, vq, vqneg, log = __init_seevinck__(
             operation=operation,
             asc_file_path=asc_file_path,
             schematic_image_path=schematic_image_path,
@@ -159,7 +160,7 @@ def __init_model__(
             params=params
         )
     elif circuit_type == CircuitType.GAUSSIAN_VTH:
-        steps, x, vq, vqneg, log = __init_gaussian_vth__(
+        steps, x, ileaks, vq, vqneg, log = __init_gaussian_vth__(
             operation=operation,
             asc_file_path=asc_file_path,
             schematic_image_path=schematic_image_path,
@@ -173,7 +174,7 @@ def __init_model__(
     else:
         raise ValueError()
 
-    return steps, x, vq, vqneg, log
+    return steps, x, ileaks, vq, vqneg, log
 
 
 def __init_standard__(
@@ -186,7 +187,7 @@ def __init_standard__(
         vbl: str,
         vblneg: str,
         params: list[str]
-) -> tuple[list[int], np.ndarray, np.ndarray, np.ndarray, str]:
+) -> tuple[list[int], np.ndarray, list[np.ndarray], np.ndarray, np.ndarray, str]:
     standard_netlist = load_asc(
         asc_file_path=asc_file_path,
         schematic_image_path=schematic_image_path
@@ -224,7 +225,10 @@ def __init_standard__(
 
     v_q_neg_standard = v_sweep_standard
     log = standard_log
-    return steps, v_sweep_standard, v_q_standard, v_q_neg_standard, log
+
+    i_leaks_standard = []
+
+    return steps, v_sweep_standard, i_leaks_standard, v_q_standard, v_q_neg_standard, log
 
 
 def __init_seevinck__(
@@ -237,7 +241,7 @@ def __init_seevinck__(
         vbl: str,
         vblneg: str,
         params: list[str]
-) -> tuple[list[int], np.ndarray, np.ndarray, np.ndarray, str]:
+) -> tuple[list[int], np.ndarray, list[np.ndarray], np.ndarray, np.ndarray, str]:
     seevinck_netlist = load_asc(
         asc_file_path=asc_file_path,
         schematic_image_path=schematic_image_path
@@ -282,7 +286,10 @@ def __init_seevinck__(
     v_sweep_seevinck = seevinck_ltr.get_trace('vsweep')
     steps = seevinck_ltr.get_steps()
     log = seevinck_log
-    return steps, v_sweep_seevinck, v_1_seevinck, v_2_seevinck, log
+
+    i_leaks_seevinck = []
+
+    return steps, v_sweep_seevinck, i_leaks_seevinck, v_1_seevinck, v_2_seevinck, log
 
 
 def __init_gaussian_vth__(
@@ -295,7 +302,7 @@ def __init_gaussian_vth__(
         vbl: str,
         vblneg: str,
         params: list[str]
-) -> tuple[list[int], np.ndarray, np.ndarray, np.ndarray, str]:
+) -> tuple[list[int], np.ndarray, list[np.ndarray], np.ndarray, np.ndarray, str]:
     gaussian_vth_netlist = load_asc(
         asc_file_path=asc_file_path,
         schematic_image_path=schematic_image_path
@@ -339,8 +346,30 @@ def __init_gaussian_vth__(
     gaussian_vth_ltr = load_ltr(raw_file_path=gaussian_vth_raw)
     v_1_gaussian_vth = gaussian_vth_ltr.get_trace("V(v1)")
     v_2_gaussian_vth = gaussian_vth_ltr.get_trace("V(v2)")
-    v_sweep_gaussian_vth = gaussian_vth_ltr.get_trace('vsweep')
+    v_sweep_gaussian_vth = gaussian_vth_ltr.get_trace('time')
     steps = gaussian_vth_ltr.get_steps()
 
     log = gaussian_vth_log
-    return steps, v_sweep_gaussian_vth, v_1_gaussian_vth, v_2_gaussian_vth, log
+
+    i_leaks_gaussian_vth = get_ileaks(gaussian_vth_ltr, operation)
+
+    return steps, v_sweep_gaussian_vth, i_leaks_gaussian_vth, v_1_gaussian_vth, v_2_gaussian_vth, log
+
+
+def get_ileaks(ltr: RawRead, operation: str) -> list[np.ndarray]:
+    i_leaks = []
+    if operation == "hold":
+        i_leak_ax_q = ltr.get_trace("Id(M5)")
+        i_leak_pu_q = ltr.get_trace("Id(M1)")
+        i_leak_pd_qneg = ltr.get_trace("Id(M4)")
+        i_leaks.append(i_leak_ax_q)
+        i_leaks.append(i_leak_pu_q)
+        i_leaks.append(i_leak_pd_qneg)
+    elif operation == "read":
+        i_leaks.append([])
+        i_leaks.append([])
+        i_leaks.append([])
+    else:
+        raise ValueError()
+
+    return i_leaks
