@@ -7,11 +7,17 @@ rit_models = f'.inc {rit_models_for_ltspice_file_path}'
 rit_models_montecarlo = f'.inc {rit_models_for_ltspice_montecarlo_file_path}'
 
 # snm-max and snm-min
-v_sweep_seevinck = 0.707
+v_sweep_seevinck = 0.655
+
+
 def snm_max(v_sweep):
     return f'.measure dc snm_max MAX({v_sweep}*v(V1)-{v_sweep}*v(V2))'
+
+
 def snm_min(v_sweep):
     return f'.measure dc snm_min MIN({v_sweep}*v(V1)-{v_sweep}*v(V2))'
+
+
 # snm_max = f'.measure dc snm_max MAX({v_sweep_seevinck}*v(V1)-{v_sweep_seevinck}*v(V2))'
 # snm_min = f'.measure dc snm_min MIN({v_sweep_seevinck}*v(V1)-{v_sweep_seevinck}*v(V2))'
 
@@ -24,13 +30,18 @@ vwl_read = '1'
 vbl_read = '1'
 vblneg_read = '1'
 
+# range-w_ax
+w_ax_start = 0.12
+w_ax_stop = 0.24
+w_ax_range = int(((w_ax_stop - w_ax_start) * 100) + 1)
+
 ########################################################################################################################
 # SNM STANDARD
 
 # AX
 l_ax_standard = '0.12u'
-w_ax_start_standard = '0.12u'
-w_ax_stop_standard = '0.24u'
+w_ax_start_standard = f'{w_ax_start}u'
+w_ax_stop_standard = f'{w_ax_stop}u'
 w_ax_step_standard = '0.01u'
 w_ax_step_param_standard = f'.step param w_ax {w_ax_start_standard} {w_ax_stop_standard} {w_ax_step_standard}'
 
@@ -64,8 +75,8 @@ dc_vsweep_standard = f'.dc Vsweep {dc_vsweep_start_standard} {dc_vsweep_stop_sta
 
 # AX
 l_ax_seevinck = '0.12u'
-w_ax_start_seevinck = '0.12u'
-w_ax_stop_seevinck = '0.24u'
+w_ax_start_seevinck = f'{w_ax_start}u'
+w_ax_stop_seevinck = f'{w_ax_stop}u'
 w_ax_step_seevinck = '0.01u'
 w_ax_step_param_seevinck = f'.step param w_ax {w_ax_start_seevinck} {w_ax_stop_seevinck} {w_ax_step_seevinck}'
 
@@ -121,8 +132,8 @@ def i_leak_p(v: str) -> str:
 # AX
 l_ax_gaussian_vth = '0.12u'
 w_ax_gaussian_vth = '0.13u'
-w_ax_start_gaussian_vth = '0.12u'
-w_ax_stop_gaussian_vth = '0.24u'
+w_ax_start_gaussian_vth = f'{w_ax_start}u'
+w_ax_stop_gaussian_vth = f'{w_ax_stop}u'
 w_ax_step_gaussian_vth = '0.01u'
 w_ax_step_param_gaussian_vth = f'.step param w_ax {w_ax_start_seevinck} {w_ax_stop_seevinck} {w_ax_step_seevinck}'
 
@@ -145,13 +156,16 @@ w_nmos_q_neg_gaussian_vth = '0.48u'
 vdd_gaussian_vth = '1'
 vsweep_gaussian_vth = '1'
 
+
 # dc Vsweep
 # dc_vsweep_start_gaussian_vth = -v_sweep_seevinck
 # dc_vsweep_stop_gaussian_vth = v_sweep_seevinck
 # dc_vsweep_step_gaussian_vth = 0.01
 def dc_vsweep_gaussian_vth(dc_vsweep_start_gaussian_vth, dc_vsweep_stop_gaussian_vth, dc_vsweep_step_gaussian_vth):
     return f'.dc Vsweep {dc_vsweep_start_gaussian_vth} {dc_vsweep_stop_gaussian_vth} {dc_vsweep_step_gaussian_vth}'
-#dc_vsweep_gaussian_vth = f'.dc Vsweep {dc_vsweep_start_gaussian_vth} {dc_vsweep_stop_gaussian_vth} {dc_vsweep_step_gaussian_vth}'
+
+
+# dc_vsweep_gaussian_vth = f'.dc Vsweep {dc_vsweep_start_gaussian_vth} {dc_vsweep_stop_gaussian_vth} {dc_vsweep_step_gaussian_vth}'
 
 tran_gaussian_vth = ".tran 0 50n 0"
 
