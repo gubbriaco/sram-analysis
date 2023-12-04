@@ -4,9 +4,14 @@ from matplotlib import pyplot as plt
 from scipy.interpolate import interp1d
 from typing import Union
 from math import sqrt
+from enum import Enum
 
 
-def rotate_points(x: Union[float, list[float]], y: Union[float, list[float]], angle_degrees: float) -> tuple[
+def rotate_points(
+        x: Union[float, list[float]],
+        y: Union[float, list[float]],
+        angle_degrees: float
+) -> tuple[
     Union[float, list[float]],
     Union[float, list[float]]
 ]:
@@ -27,10 +32,18 @@ def rotate_points(x: Union[float, list[float]], y: Union[float, list[float]], an
     return x_rotated, y_rotated
 
 
+class RequestPlot(Enum):
+    TRUE = 1
+    FALSE = 0
+
+
 def graphical_processing(
-        x_vq: list[float], vq: list[float],
-        x_vqneg: list[float], vqneg: list[float],
+        x_vq: list[float],
+        vq: list[float],
+        x_vqneg: list[float],
+        vqneg: list[float],
         ax: plt.axes,
+        request_text_plot: RequestPlot,
         factor: int = 100
 ) -> float:
     """
@@ -42,6 +55,7 @@ def graphical_processing(
     :param vqneg: Lista delle coordinate y per il secondo set di dati.
     :param ax: Oggetto Axes di matplotlib per il disegno del grafico.
     :param factor: Fattore di interpolazione per ottenere curve più lisce (default: 100, tipo int).
+    :param request_text_plot: Richiesta plot del testo relativo all'SNM se si tratta di un plot singolo.
     :return: La somma normalizzata di Manifold (SNM) calcolata durante il processo grafico (tipo float).
 
     Questo metodo esegue un processo grafico basato su interpolazione e calcolo di lunghezze. Prende in input due set
@@ -87,13 +101,21 @@ def graphical_processing(
         edge=edge,
         snm=snm,
         x=x,
-        y=y
+        y=y,
+        request_text_plot = request_text_plot
     )
 
     return snm[0]
 
 
-def interpolate(x_v: list[float], v: list[float], factor: int) -> tuple[np.ndarray[float], np.ndarray[float]]:
+def interpolate(
+        x_v: list[float],
+        v: list[float],
+        factor: int
+) -> tuple[
+    np.ndarray[float],
+    np.ndarray[float]
+]:
     """
     Interpolazione cubica di un set di dati.
 
@@ -112,12 +134,17 @@ def interpolate(x_v: list[float], v: list[float], factor: int) -> tuple[np.ndarr
     return x, y
 
 
-def graphical_plot(ax: plt.axes,
-                   x1: np.ndarray[float], y1: np.ndarray[float],
-                   x2: np.ndarray[float], y2: np.ndarray[float],
-                   edge: float, snm: float,
-                   x: np.ndarray[float], y: np.ndarray[float]
-                   ) -> None:
+def graphical_plot(
+        ax: plt.axes,
+        x1: np.ndarray[float],
+        y1: np.ndarray[float],
+        x2: np.ndarray[float],
+        y2: np.ndarray[float],
+        edge: float, snm: float,
+        x: np.ndarray[float],
+        y: np.ndarray[float],
+        request_text_plot: RequestPlot
+) -> None:
     """
     Plotta un grafico con curve, testo e quadrati per rappresentare il risultato del processo grafico effettuato.
 
@@ -130,6 +157,7 @@ def graphical_plot(ax: plt.axes,
     :param snm: Static Noise Margin
     :param x: Lista delle coordinate x per il quadrato.
     :param y: Lista delle coordinate y per il quadrato.
+    :param request_text_plot: Richiesta plot del testo relativo all'SNM se si tratta di un plot singolo.
     :return: None
 
     Le curve definite dai dati (x1, y1) e (x2, y2) sono rappresentate in blu e verde rispettivamente. Nello
@@ -139,7 +167,8 @@ def graphical_plot(ax: plt.axes,
     ax.plot(x1, y1, color='blue')
     ax.plot(x2, y2, color='green')
 
-    ax.text(x[0] + edge + 0.05, y[0] + edge + 0.05, 'SNM= %.3f mV' % snm, fontsize=14)
+    if request_text_plot == RequestPlot.TRUE:
+        ax.text(x[0] + edge + 0.05, y[0] + edge + 0.05, 'SNM= %.3f mV' % snm, fontsize=14)
 
     ax.add_patch(patches.Rectangle((x[0], y[0]), width=edge, height=edge, fill=False))
     ax.plot([x[0], x[0] + edge], [y[0], y[0] + edge], 'k')
@@ -152,13 +181,19 @@ def graphical_plot(ax: plt.axes,
     ax.set_title("Standard Method and SNM")
 
 
-def seevinck_processing(x_v1_minus_v2: list[float], v1_minus_v2: list[float], ax: plt.axes) -> float:
+def seevinck_processing(
+        x_v1_minus_v2: list[float],
+        v1_minus_v2: list[float],
+        ax: plt.axes,
+        request_text_plot: RequestPlot
+) -> float:
     """
     Processo di elaborazione basato su metodo di Seevinck.
 
     :param x_v1_minus_v2: Lista dei valori delle ascisse corrispondenti a v1_minus_v2.
     :param v1_minus_v2: Lista dei valori delle ordinate corrispondenti a v1_minus_v2.
     :param ax: Oggetto axes di matplotlib per il plotting.
+    :param request_text_plot: Richiesta plot del testo relativo all'SNM se si tratta di un plot singolo.
     :return: Static Noise Margin (SNM)
 
     Questo metodo esegue un processo di elaborazione basato su metodo di Seevinck. Trova segmenti nei dati, determina
@@ -191,13 +226,18 @@ def seevinck_processing(x_v1_minus_v2: list[float], v1_minus_v2: list[float], ax
         x_diff=x_diff,
         y_diff=y_diff,
         x_snm_diff=[x_diff_snm_start, x_diff_snm_stop],
-        y_snm_diff=[y_diff_snm_start, y_diff_snm_stop]
+        y_snm_diff=[y_diff_snm_start, y_diff_snm_stop],
+        request_text_plot = request_text_plot
     )
 
     return snm
 
 
-def find_segments(samples: list[float]) -> list[list[float]]:
+def find_segments(
+        samples: list[float]
+) -> list[
+    list[float]
+]:
     """
     Trova segmenti in una lista di campioni.
 
@@ -217,8 +257,17 @@ def find_segments(samples: list[float]) -> list[list[float]]:
     return segments
 
 
-def inscribable_square(height: float, width: float) -> tuple[
-    float, float, float, list[float], list[float], list[float], list[float]
+def inscribable_square(
+        height: float,
+        width: float
+) -> tuple[
+    float,
+    float,
+    float,
+    list[float],
+    list[float],
+    list[float],
+    list[float]
 ]:
     """
     Calcola i parametri di un quadrato inscrivibile in un lobo specificato.
@@ -250,12 +299,17 @@ def inscribable_square(height: float, width: float) -> tuple[
     )
 
 
-def seevinck_plot(ax: plt.axes,
-                  snm: float,
-                  x_snm_start: float, y_snm_start: float,
-                  x_diff: list[float], y_diff: list[float],
-                  x_snm_diff: list[list[float]], y_snm_diff: list[list[float]]
-                  ) -> None:
+def seevinck_plot(
+        ax: plt.axes,
+        snm: float,
+        x_snm_start: float,
+        y_snm_start: float,
+        x_diff: list[float],
+        y_diff: list[float],
+        x_snm_diff: list[list[float]],
+        y_snm_diff: list[list[float]],
+        request_text_plot: RequestPlot
+) -> None:
     """
     Disegna un grafico per il processo di elaborazione basato su metodo di Seevinck.
 
@@ -267,6 +321,7 @@ def seevinck_plot(ax: plt.axes,
     :param y_diff: Lista dei valori delle ordinate della curva rappresentate la differenza tra V1 e V2.
     :param x_snm_diff: Lista delle coordinate x del quadrato rappresentante l'SNM.
     :param y_snm_diff: Lista delle coordinate y del quadrato rappresentante l'SNM.
+    :param request_text_plot: Richiesta plot del testo relativo all'SNM se si tratta di un plot singolo.
     :return: None
 
     Questo metodo disegna un grafico per il processo di elaborazione basato su metodo di Seevinck.
@@ -275,6 +330,7 @@ def seevinck_plot(ax: plt.axes,
     """
     ax.plot(x_diff, y_diff, 'red')
     ax.plot(x_snm_diff, y_snm_diff, 'k')
-    ax.text(x_snm_start + 0.05, y_snm_start + 0.05, 'SNM= %.3f mV' % snm, fontsize=14)
+    if request_text_plot == RequestPlot.TRUE:
+        ax.text(x_snm_start + 0.05, y_snm_start + 0.05, 'SNM= %.3f mV' % snm, fontsize=14)
     ax.set_title("V(v1)-V(v2) Curve Hold Phase and SNM")
     ax.grid()
