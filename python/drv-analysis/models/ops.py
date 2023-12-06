@@ -533,9 +533,10 @@ def __init_standard_transient__(
     standard_transient_netlist.set_parameter('l_nmos_q_neg', l_nmos_q_neg_standard_transient)
     standard_transient_netlist.set_parameter('w_nmos_q_neg', w_nmos_q_neg_standard_transient)
     standard_transient_netlist.set_parameter('vdd', vdd)
+    standard_transient_netlist.set_parameter('vsweep', vsweep)
     standard_transient_netlist.set_parameter('vwl', vwl)
-    standard_transient_netlist.set_parameter('vbl', vbl)
-    standard_transient_netlist.set_parameter('vblneg', vblneg)
+    standard_transient_netlist.set_component_value('Vbl', vbl)
+    standard_transient_netlist.set_component_value('Vblneg', vblneg)
     for param in params:
         standard_transient_netlist.add_instructions(param)
 
@@ -556,7 +557,7 @@ def __init_standard_transient__(
     v_wl_standard_transient = standard_transient_ltr.get_trace("V(wl)")
     v_bl_standard_transient = standard_transient_ltr.get_trace("V(bl)")
     v_blneg_standard_transient = standard_transient_ltr.get_trace("V(blneg)")
-    time = standard_transient_ltr.get_trace('time')
+    time = standard_transient_ltr.get_trace('vsweep')
     steps = standard_transient_ltr.get_steps()
 
     log = standard_transient_log
@@ -583,9 +584,9 @@ def get_ileaks(
 ) -> list[np.ndarray]:
     i_leaks = []
     if operation == "hold":
-        i_leak_ax_q = ltr.get_trace("Id(AX_Q)")
-        i_leak_pu_q = ltr.get_trace("Id(PU_Q)")
-        i_leak_pd_qneg = ltr.get_trace("Id(PD_QNEG)")
+        i_leak_ax_q = ltr.get_trace("Id(M7)")
+        i_leak_pu_q = ltr.get_trace("Id(M6)")
+        i_leak_pd_qneg = ltr.get_trace("Id(M3)")
         i_leaks.append(i_leak_ax_q)
         i_leaks.append(i_leak_pu_q)
         i_leaks.append(i_leak_pd_qneg)

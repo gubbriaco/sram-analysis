@@ -222,16 +222,18 @@ w_pmos_q_neg_standard_transient = '0.12u'
 l_nmos_q_neg_standard_transient = '0.12u'
 w_nmos_q_neg_standard_transient = '0.48u'
 
-# voltage
+# vdd
 vdd_standard_transient = '1'
+# vsweep
+vsweep_standard_transient = '1'
 
 # tran
 tran_standard_range = '150n'
 tran_standard = f'.tran {tran_standard_range}'
 
 # vbl_hold transient
-vbl_hold_transient_vinitial = '0'
-vbl_hold_transient_von = vdd_standard_transient
+vbl_hold_transient_vinitial = vdd_standard_transient
+vbl_hold_transient_von = '0'
 vbl_hold_transient_tdelay = '100p'
 vbl_hold_transient_trise = '10p'
 vbl_hold_transient_tfall = '10p'
@@ -267,4 +269,15 @@ vblneg_hold_transient = (
     f'{vblneg_hold_transient_ton} '
     f'{vblneg_hold_transient_tperiod}'
     f')'
+)
+
+# step param run
+step_param_run_standard_transient_start = 1
+step_param_run_standard_transient_stop = 400
+step_param_run_standard_transient_step = 1
+step_param_run_standard_transient = (
+    f'.step param run '
+    f'{step_param_run_standard_transient_start} '
+    f'{step_param_run_standard_transient_stop} '
+    f'{step_param_run_standard_transient_step}'
 )
