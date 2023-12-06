@@ -1,25 +1,14 @@
 from utils.path import rit_models_for_ltspice_file_path, rit_models_for_ltspice_montecarlo_file_path
 
+########################################################################################################################
+########################################################################################################################
+# COMMON PARAMETERS
+
 # rit-models
 rit_models = f'.inc {rit_models_for_ltspice_file_path}'
 
 # rit-models-gaussian
 rit_models_montecarlo = f'.inc {rit_models_for_ltspice_montecarlo_file_path}'
-
-# snm-max and snm-min
-v_sweep_seevinck = 0.655
-
-
-def snm_max(v_sweep):
-    return f'.measure dc snm_max MAX({v_sweep}*v(V1)-{v_sweep}*v(V2))'
-
-
-def snm_min(v_sweep):
-    return f'.measure dc snm_min MIN({v_sweep}*v(V1)-{v_sweep}*v(V2))'
-
-
-# snm_max = f'.measure dc snm_max MAX({v_sweep_seevinck}*v(V1)-{v_sweep_seevinck}*v(V2))'
-# snm_min = f'.measure dc snm_min MIN({v_sweep_seevinck}*v(V1)-{v_sweep_seevinck}*v(V2))'
 
 # vwl, vbl, vblneg
 vwl_hold = '0'
@@ -36,6 +25,10 @@ w_ax_stop = 0.24
 w_ax_range = int(((w_ax_stop - w_ax_start) * 100) + 1)
 
 ########################################################################################################################
+########################################################################################################################
+
+
+########################################################################################################################
 # SNM STANDARD
 
 # AX
@@ -43,7 +36,12 @@ l_ax_standard = '0.12u'
 w_ax_start_standard = f'{w_ax_start}u'
 w_ax_stop_standard = f'{w_ax_stop}u'
 w_ax_step_standard = '0.01u'
-w_ax_step_param_standard = f'.step param w_ax {w_ax_start_standard} {w_ax_stop_standard} {w_ax_step_standard}'
+w_ax_step_param_standard = (
+    f'.step param w_ax '
+    f'{w_ax_start_standard} '
+    f'{w_ax_stop_standard} '
+    f'{w_ax_step_standard}'
+)
 
 # save w_ax
 save_w_ax_standard = '.meas w_ax_values param w_ax'
@@ -68,17 +66,39 @@ vsweep_standard = '1'
 dc_vsweep_start_standard = 0
 dc_vsweep_stop_standard = 1
 dc_vsweep_step_standard = 0.01
-dc_vsweep_standard = f'.dc Vsweep {dc_vsweep_start_standard} {dc_vsweep_stop_standard} {dc_vsweep_step_standard}'
+dc_vsweep_standard = (
+    f'.dc Vsweep '
+    f'{dc_vsweep_start_standard} '
+    f'{dc_vsweep_stop_standard} '
+    f'{dc_vsweep_step_standard}'
+)
 
 ########################################################################################################################
 # SNM SEEVINCK
+
+# snm-max and snm-min
+v_sweep_seevinck = 0.655
+
+
+def snm_max(v_sweep):
+    return f'.measure dc snm_max MAX({v_sweep}*v(V1)-{v_sweep}*v(V2))'
+
+
+def snm_min(v_sweep):
+    return f'.measure dc snm_min MIN({v_sweep}*v(V1)-{v_sweep}*v(V2))'
+
 
 # AX
 l_ax_seevinck = '0.12u'
 w_ax_start_seevinck = f'{w_ax_start}u'
 w_ax_stop_seevinck = f'{w_ax_stop}u'
 w_ax_step_seevinck = '0.01u'
-w_ax_step_param_seevinck = f'.step param w_ax {w_ax_start_seevinck} {w_ax_stop_seevinck} {w_ax_step_seevinck}'
+w_ax_step_param_seevinck = (
+    f'.step param w_ax '
+    f'{w_ax_start_seevinck} '
+    f'{w_ax_stop_seevinck} '
+    f'{w_ax_step_seevinck}'
+)
 
 # save w_ax
 save_w_ax_seevinck = '.meas w_ax_values param w_ax'
@@ -119,16 +139,6 @@ e8_seevinck = '-0.707'
 ########################################################################################################################
 # GAUSSIAN-VTH
 
-# i-leak-n
-def i_leak_n(v: str) -> str:
-    return f'.measure tran I-leak-N FIND i({v}) AT=0n'
-
-
-# i-leak-p
-def i_leak_p(v: str) -> str:
-    return f'.measure tran I-leak-P FIND i({v}) AT=18n'
-
-
 # AX
 l_ax_gaussian_vth = '0.12u'
 w_ax_gaussian_vth = '0.13u'
@@ -157,15 +167,9 @@ vdd_gaussian_vth = '1'
 vsweep_gaussian_vth = '1'
 
 
-# dc Vsweep
-# dc_vsweep_start_gaussian_vth = -v_sweep_seevinck
-# dc_vsweep_stop_gaussian_vth = v_sweep_seevinck
-# dc_vsweep_step_gaussian_vth = 0.01
 def dc_vsweep_gaussian_vth(dc_vsweep_start_gaussian_vth, dc_vsweep_stop_gaussian_vth, dc_vsweep_step_gaussian_vth):
     return f'.dc Vsweep {dc_vsweep_start_gaussian_vth} {dc_vsweep_stop_gaussian_vth} {dc_vsweep_step_gaussian_vth}'
 
-
-# dc_vsweep_gaussian_vth = f'.dc Vsweep {dc_vsweep_start_gaussian_vth} {dc_vsweep_stop_gaussian_vth} {dc_vsweep_step_gaussian_vth}'
 
 tran_gaussian_vth = ".tran 0 50n 0"
 
@@ -183,4 +187,84 @@ e8_gaussian_vth = '-0.707'
 step_param_run_gaussian_vth_start = 1
 step_param_run_gaussian_vth_stop = 400
 step_param_run_gaussian_vth_step = 1
-step_param_run_gaussian_vth = f'.step param run {step_param_run_gaussian_vth_start} {step_param_run_gaussian_vth_stop} {step_param_run_gaussian_vth_step}'
+step_param_run_gaussian_vth = (
+    f'.step param run '
+    f'{step_param_run_gaussian_vth_start} '
+    f'{step_param_run_gaussian_vth_stop} '
+    f'{step_param_run_gaussian_vth_step}'
+)
+
+########################################################################################################################
+# SNM STANDARD TRANSIENT
+
+# AX
+l_ax_standard_transient = '0.12u'
+w_ax_standard_transient = '0.13u'
+w_ax_start_standard_transient = f'{w_ax_start}u'
+w_ax_stop_standard_transient = f'{w_ax_stop}u'
+w_ax_step_standard_transient = '0.01u'
+w_ax_step_param_standard_transient = (
+    f'.step param w_ax '
+    f'{w_ax_start_standard_transient} '
+    f'{w_ax_stop_standard_transient} '
+    f'{w_ax_step_standard_transient}'
+)
+
+# Q transistor
+l_pmos_q_standard_transient = '0.12u'
+w_pmos_q_standard_transient = '0.12u'
+l_nmos_q_standard_transient = '0.12u'
+w_nmos_q_standard_transient = '0.48u'
+
+# Q neg transistor
+l_pmos_q_neg_standard_transient = '0.12u'
+w_pmos_q_neg_standard_transient = '0.12u'
+l_nmos_q_neg_standard_transient = '0.12u'
+w_nmos_q_neg_standard_transient = '0.48u'
+
+# voltage
+vdd_standard_transient = '1'
+
+# tran
+tran_standard_range = '150n'
+tran_standard = f'.tran {tran_standard_range}'
+
+# vbl_hold transient
+vbl_hold_transient_vinitial = '0'
+vbl_hold_transient_von = vdd_standard_transient
+vbl_hold_transient_tdelay = '100p'
+vbl_hold_transient_trise = '10p'
+vbl_hold_transient_tfall = '10p'
+vbl_hold_transient_ton = '490p'
+vbl_hold_transient_tperiod = '1n'
+vbl_hold_transient = (
+    f'PULSE('
+    f'{vbl_hold_transient_vinitial} '
+    f'{vbl_hold_transient_von} '
+    f'{vbl_hold_transient_tdelay} '
+    f'{vbl_hold_transient_trise} '
+    f'{vbl_hold_transient_tfall} '
+    f'{vbl_hold_transient_ton} '
+    f'{vbl_hold_transient_tperiod}'
+    f')'
+)
+
+# vbl_neg_hold transient
+vblneg_hold_transient_vinitial = vdd_standard_transient
+vblneg_hold_transient_von = '0'
+vblneg_hold_transient_tdelay = '100p'
+vblneg_hold_transient_trise = '10p'
+vblneg_hold_transient_tfall = '10p'
+vblneg_hold_transient_ton = '490p'
+vblneg_hold_transient_tperiod = '1n'
+vblneg_hold_transient = (
+    f'PULSE('
+    f'{vblneg_hold_transient_vinitial} '
+    f'{vblneg_hold_transient_von} '
+    f'{vblneg_hold_transient_tdelay} '
+    f'{vblneg_hold_transient_trise} '
+    f'{vblneg_hold_transient_tfall} '
+    f'{vblneg_hold_transient_ton} '
+    f'{vblneg_hold_transient_tperiod}'
+    f')'
+)

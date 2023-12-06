@@ -1,0 +1,16 @@
+* D:\Disco D\universita\magistrale\progettazione-low-power\progetti\progetto-2\ltspice\models\standard\hold\transient\standard_hold.asc
+M§PU_QNEG VDD Q QNEG VDD EECMOSP l={l_pmos_q_neg} w={w_pmos_q_neg}
+M§PU_Q VDD QNEG Q VDD EECMOSP l={l_pmos_q} w={w_pmos_q}
+M§PD_QNEG QNEG Q 0 0 EECMOSN l={l_nmos_q_neg} w={w_nmos_q_neg}
+M§PD_Q Q QNEG 0 0 EECMOSN l={l_nmos_q} w={w_nmos_q}
+M§AX_QNEG BLNEG WL QNEG 0 EECMOSN l={l_ax} w={w_ax}
+M§AX_Q Q WL BL 0 EECMOSN l={l_ax} w={w_ax}
+Vdd VDD 0 {vdd}
+Vbl BL 0 {vbl}
+Vblneg BLNEG 0 {vblneg}
+Vwl WL 0 {vwl}
+.model NMOS NMOS
+.model PMOS PMOS
+.lib C:\Users\giorg\AppData\Local\LTspice\lib\cmp\standard.mos
+.backanno
+.end
