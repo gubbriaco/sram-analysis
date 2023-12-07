@@ -407,8 +407,8 @@ Warning: Ps = 0 is less than W.
 .step run=399
 .step run=400
 
-Date: Thu Dec  7 00:42:32 2023
-Total elapsed time: 23.638 seconds.
+Date: Thu Dec  7 01:24:59 2023
+Total elapsed time: 26.355 seconds.
 
 tnom = 27
 temp = 27
@@ -422,6 +422,6 @@ matrix size = 11
 fillins = 0
 solver = Normal
 Avg thread counts: 7.9/0.0/8.0/7.9
-Matrix Compiler1:      26 opcodes  0.2/[0.1]/0.3
-Matrix Compiler2: 797 bytes object code size  0.2/0.2/[0.1]
+Matrix Compiler1:      26 opcodes  0.3/0.2/[0.2]
+Matrix Compiler2: 797 bytes object code size  0.2/0.4/[0.1]
 

@@ -32,9 +32,9 @@ Vblneg BLneg 0 {vblneg}
 .PARAM l_nmos_q_neg=0.12u  ; Batch instruction
 .PARAM w_nmos_q_neg=0.48u  ; Batch instruction
 .PARAM vdd=0.25  ; Batch instruction
-.PARAM vwl=1  ; Batch instruction
-.PARAM vbl=1  ; Batch instruction
-.PARAM vblneg=1  ; Batch instruction
+.PARAM vwl=0.25  ; Batch instruction
+.PARAM vbl=0.25  ; Batch instruction
+.PARAM vblneg=0.25  ; Batch instruction
 .PARAM vsweep=1  ; Batch instruction
 .PARAM e1=0.707  ; Batch instruction
 .PARAM e2=0.707  ; Batch instruction

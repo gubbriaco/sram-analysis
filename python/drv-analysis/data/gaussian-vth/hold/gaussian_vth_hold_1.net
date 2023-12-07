@@ -33,8 +33,8 @@ Vblneg BLneg 0 {vblneg}
 .PARAM w_nmos_q_neg=0.48u  ; Batch instruction
 .PARAM vdd=0.25  ; Batch instruction
 .PARAM vwl=0  ; Batch instruction
-.PARAM vbl=1  ; Batch instruction
-.PARAM vblneg=1  ; Batch instruction
+.PARAM vbl=0.25  ; Batch instruction
+.PARAM vblneg=0.25  ; Batch instruction
 .PARAM vsweep=1  ; Batch instruction
 .PARAM e1=0.707  ; Batch instruction
 .PARAM e2=0.707  ; Batch instruction
@@ -45,7 +45,9 @@ Vblneg BLneg 0 {vblneg}
 .PARAM e7=0.707  ; Batch instruction
 .PARAM e8=-0.707  ; Batch instruction
 .inc ../../../../../ltspice/utils/utils-montecarlo-experiments/RIT_Models_For_LTSPICE_MonteCarlo.txt
-.tran 0 50n 0
+.dc Vsweep -0.17674999999999952 0.17674999999999952 0.01
 .step param run 1 400 1
+.measure dc snm_max MAX(0.707*v(V1)-0.707*v(V2))
+.measure dc snm_min MIN(0.707*v(V1)-0.707*v(V2))
 .backanno
 .end
