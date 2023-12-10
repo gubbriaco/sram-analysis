@@ -272,12 +272,14 @@ def __init_standard__(
 
     standard_runner = SimRunner(output_folder=f"{data}/standard/{operation}/")
     standard_runner.run(netlist=standard_netlist, timeout=3600)
-    print('Successful/Total Simulations: ' + str(standard_runner.okSim) + '/' + str(standard_runner.runno))
+    print('Successful/Total Simulations: ' + str(standard_runner.okSim) + '/' + str(standard_runner.runno), flush=True)
 
     standard_raw = ""
     standard_log = ""
-    for standard_raw, standard_log in standard_runner:
-        print("Raw file: %s, Log file: %s" % (standard_raw, standard_log))
+    for raw, log in standard_runner:
+        standard_raw = raw
+        standard_log = log
+        print("Raw file: %s, Log file: %s" % (standard_raw, standard_log), flush=True)
 
     standard_ltr = load_ltr(raw_file_path=standard_raw)
     v_q_standard = standard_ltr.get_trace("V(q)")
@@ -364,12 +366,14 @@ def __init_seevinck__(
 
     seevinck_runner = SimRunner(output_folder=f"{data}/seevinck/{operation}/")
     seevinck_runner.run(netlist=seevinck_netlist, timeout=3600)
-    print('Successful/Total Simulations: ' + str(seevinck_runner.okSim) + '/' + str(seevinck_runner.runno))
+    print('Successful/Total Simulations: ' + str(seevinck_runner.okSim) + '/' + str(seevinck_runner.runno), flush=True)
 
     seevinck_raw = ""
     seevinck_log = ""
-    for seevinck_raw, seevinck_log in seevinck_runner:
-        print("Raw file: %s, Log file: %s" % (seevinck_raw, seevinck_log))
+    for raw, log in seevinck_runner:
+        seevinck_raw = raw
+        seevinck_log = log
+        print("Raw file: %s, Log file: %s" % (seevinck_raw, seevinck_log), flush=True)
 
     seevinck_ltr = load_ltr(raw_file_path=seevinck_raw)
     v_1_seevinck = seevinck_ltr.get_trace("V(v1)")
@@ -457,12 +461,14 @@ def __init_gaussian_vth_dc__(
     gaussian_vth_dc_runner = SimRunner(output_folder=f"{data}/gaussian-vth/{operation}/")
     gaussian_vth_dc_runner.run(netlist=gaussian_vth_dc_netlist, timeout=3600)
     print('Successful/Total Simulations: ' + str(gaussian_vth_dc_runner.okSim) + '/' + str(
-        gaussian_vth_dc_runner.runno))
+        gaussian_vth_dc_runner.runno), flush=True)
 
     gaussian_vth_dc_raw = ""
     gaussian_vth_dc_log = ""
-    for gaussian_vth_dc_raw, gaussian_vth_dc_log in gaussian_vth_dc_runner:
-        print("Raw file: %s, Log file: %s" % (gaussian_vth_dc_raw, gaussian_vth_dc_log))
+    for raw, log in gaussian_vth_dc_runner:
+        gaussian_vth_dc_raw = raw
+        gaussian_vth_dc_log = log
+        print("Raw file: %s, Log file: %s" % (gaussian_vth_dc_raw, gaussian_vth_dc_log), flush=True)
 
     gaussian_vth_dc_ltr = load_ltr(raw_file_path=gaussian_vth_dc_raw)
     v_1_gaussian_dc_vth = gaussian_vth_dc_ltr.get_trace("V(v1)")
@@ -543,12 +549,14 @@ def __init_standard_transient__(
     standard_transient_runner = SimRunner(output_folder=f"{data}/standard/{operation}/")
     standard_transient_runner.run(netlist=standard_transient_netlist, timeout=3600)
     print('Successful/Total Simulations: ' + str(standard_transient_runner.okSim) + '/' + str(
-        standard_transient_runner.runno))
+        standard_transient_runner.runno), flush=True)
 
     standard_transient_raw = ""
     standard_transient_log = ""
-    for standard_transient_raw, standard_transient_log in standard_transient_runner:
-        print("Raw file: %s, Log file: %s" % (standard_transient_raw, standard_transient_log))
+    for raw, log in standard_transient_runner:
+        standard_transient_raw = raw
+        standard_transient_log = log
+        print("Raw file: %s, Log file: %s" % (standard_transient_raw, standard_transient_log), flush=True)
 
     standard_transient_ltr = load_ltr(raw_file_path=standard_transient_raw)
     v_1_standard_transient = standard_transient_ltr.get_trace("V(q)")

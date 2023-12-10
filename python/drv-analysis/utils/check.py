@@ -12,7 +12,7 @@ def check_file(file_path: str) -> None:
     """
     try:
         with open(file_path, "r"):
-            print(f"File opened successfully: {file_path}", end="\n")
+            print(f"File opened successfully: {file_path}", end="\n", flush=True)
     except FileNotFoundError:
         print(f"File not found: {file_path}", end="\n")
         raise
@@ -32,7 +32,7 @@ def check_image(image_path: str) -> None:
     if os.path.exists(image_path):
         try:
             os.remove(image_path)
-            print(f"File updated successfully: {image_path}", end="\n")
+            print(f"File updated successfully: {image_path}", end="\n", flush=True)
         except Exception as e:
             print(f"Error deleting file: {str(e)}", end="\n")
             raise
@@ -40,7 +40,7 @@ def check_image(image_path: str) -> None:
         print(f"File not found: {image_path}", end="\n")
         try:
             open(image_path, 'w').close()
-            print(f"File created successfully: {image_path}", end="\n")
+            print(f"File created successfully: {image_path}", end="\n", flush=True)
         except Exception as e:
             print(f"Error creating file: {str(e)}", end="\n")
             raise
