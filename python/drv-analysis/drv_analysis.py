@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 import os
 from models.ops import save_image
-from utils.path import ltspice, schematics, images, data
+from utils.path import images
 from standard_hold_snm_analysis import standard_hold_snm_analysis as standardhold
 from standard_read_snm_analysis import standard_read_snm_analysis as standardread
 from seevinck_hold_snm_analysis import seevinck_hold_snm_analysis as seevinckhold
@@ -231,46 +231,38 @@ def t_ileak_hold_vdd_scaling_run():
         print('VDD Scaling Initialised')
         row = 0
         col = 0
-        fig_ileak_hold, axs_ileak_hold = plt.subplots(rows, cols, figsize=(16, 6))
-        plt.suptitle("I Leak Hold Operation DC Simulation VDD Scaling")
-        i = 0
-        for scaling in np.arange(vdd_start, vdd_stop, -vdd_step):
-            if row == rows:
-                break
-            vdd_scaled = round(scaling, 2)
+        with plot_lock:
+            fig_ileak_hold, axs_ileak_hold = plt.subplots(rows, cols, figsize=(16, 6))
+            plt.suptitle("I Leak Hold Operation DC Simulation VDD Scaling")
+            i = 0
+            for scaling in np.arange(vdd_start, vdd_stop, -vdd_step):
+                if row == rows:
+                    break
+                vdd_scaled = round(scaling, 2)
 
-            axs_ileak_hold[row, col].hist(i_leak_hold_array[i], bins=100, edgecolor='black')
-            axs_ileak_hold[row, col].set_xlabel("I_LEAK(HOLD)")
-            axs_ileak_hold[row, col].set_ylabel("#")
-            axs_ileak_hold[row, col].set_title(f"vdd={vdd_scaled} V Histogram")
-            i = i+1
+                axs_ileak_hold[row, col].hist(i_leak_hold_array[i], bins=100, edgecolor='black')
+                axs_ileak_hold[row, col].set_xlabel("I_LEAK(HOLD)")
+                axs_ileak_hold[row, col].set_ylabel("#")
+                axs_ileak_hold[row, col].set_title(f"vdd={vdd_scaled} V Histogram")
+                i = i+1
 
-            if col == (cols - 1):
-                row = row + 1
-                col = 0
-            else:
-                col = col + 1
+                if col == (cols - 1):
+                    row = row + 1
+                    col = 0
+                else:
+                    col = col + 1
 
-        plt.tight_layout()
-        plt.subplots_adjust(hspace=1.5, wspace=1)
-        save_image(image_path=os.path.join(images, "ileak_hold_operation_dc_vdd_scaling.png"), plt=plt)
-        plt.show()
+            plt.tight_layout()
+            plt.subplots_adjust(hspace=1.5, wspace=1)
+            save_image(image_path=os.path.join(images, "ileak_hold_operation_dc_vdd_scaling.png"), plt=plt)
+            plt.show()
 
     vdd_scaling_comparative_analysis_semaphore.release()
 
 
 def t_comparative_analysis_vdd_scaling_run():
     vdd_scaling_comparative_analysis_semaphore.acquire()
-    snmileakvddscalingcomparative(
-        vdd_gaussian_vth_scaled,
-        snm_gaussian_vth_hold_mean,
-        snm_gaussian_vth_hold_stdev,
-        snm_gaussian_vth_read_mean,
-        snm_gaussian_vth_read_stdev,
-        vdd_standard_transient_scaled,
-        i_leak_standard_transient_hold_mean,
-        i_leak_standard_transient_hold_stdev
-    )
+    snmileakvddscalingcomparative(plot_lock)
 
 
 if __name__ == "__main__":
