@@ -1,9 +1,11 @@
-from utils.path import images, data
+from utils.dir import get_values_from_dir, get_mean_from_file, get_stdev_from_file
+from utils.path import images
 from models.ops import save_image
-from matplotlib import pyplot as plt
+import pandas as pd
+import matplotlib.pyplot as plt
+from pandas.plotting import table
 import os
 import numpy as np
-from utils.dir import get_values_from_dir, get_mean_from_file, get_stdev_from_file
 
 
 def snm_ileak_vdd_scaling_comparative_analysis(plot_lock):
@@ -35,6 +37,7 @@ def snm_ileak_vdd_scaling_comparative_analysis(plot_lock):
         else:
             col = col + 1
 
+    from utils.path import data
     snm_hold_values = get_values_from_dir(os.path.join(data, 'out', 'hold', 'snm'))
     snm_read_values = get_values_from_dir(os.path.join(data, 'out', 'read', 'snm'))
     ileak_hold_values = get_values_from_dir(os.path.join(data, 'out', 'hold', 'ileak'))
@@ -126,4 +129,39 @@ def snm_ileak_vdd_scaling_comparative_analysis(plot_lock):
 
         fig_table_2.tight_layout()
         save_image(image_path=os.path.join(images, "comparative_analysis_vdd_scaling_2.png"), plt=plt)
+        plt.show()
+
+    data = {
+        'vdd [V]': vdd_scaled,
+        'snm(hold)_mean [mV]': snm_gaussian_vth_hold_mean,
+        'snm(hold)_stdev [mV]': snm_gaussian_vth_hold_stdev,
+        'snm(read)_mean [mV]': snm_gaussian_vth_read_mean,
+        'snm(read)_stdev [mV]': snm_gaussian_vth_read_stdev,
+        'ileak(hold)_mean [A]': i_leak_standard_transient_hold_mean,
+        'ileak(hold)_stdev [A]': i_leak_standard_transient_hold_stdev
+    }
+    df = pd.DataFrame(data)
+    blankIndex = [''] * len(df)
+    df.index = blankIndex
+    with plot_lock:
+        fig_table_comparative, ax_table_comparative = plt.subplots(figsize=(16, 4))
+        ax_table_comparative.set_frame_on(False)
+        tab = table(
+            ax_table_comparative,
+            df,
+            loc='upper center',
+            colWidths=[0.15] * len(df.columns),
+            cellLoc='center'
+        )
+        tab.auto_set_font_size(False)
+        tab.set_fontsize(10)
+        tab.scale(1.2, 1.2)
+
+        for key, cell in tab.get_celld().items():
+            cell.set_text_props(fontweight='bold')
+
+        ax_table_comparative.axis('off')
+
+        fig_table_comparative.tight_layout()
+        save_image(image_path=os.path.join(images, "table_comparative_analysis_vdd_scaling.png"), plt=plt)
         plt.show()
