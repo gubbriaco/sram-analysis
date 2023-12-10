@@ -1,8 +1,9 @@
 from matplotlib import pyplot as plt
-import os
-from utils.path import data
-from utils.dir import get_values_from_dir
 import numpy as np
+import os
+from utils.path import data, images
+from utils.dir import get_values_from_dir
+from models.ops import save_image
 
 
 def drv_analysis(plot_lock):
@@ -36,4 +37,5 @@ def drv_analysis(plot_lock):
         plt.ylabel('# failed_cells')
         plt.title('DRV Analysis')
         plt.tight_layout()
+        save_image(image_path=os.path.join(images, "drv_analysis.png"), plt=plt)
         plt.show()

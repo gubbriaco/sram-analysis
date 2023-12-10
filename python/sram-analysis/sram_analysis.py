@@ -295,7 +295,7 @@ if __name__ == "__main__":
     t_snm_read_vdd_scaling = threading.Thread(target=t_snm_read_vdd_scaling_run)
     t_ileak_hold_vdd_scaling = threading.Thread(target=t_ileak_hold_vdd_scaling_run)
     t_vdd_scaling_comparative = threading.Thread(target=t_comparative_analysis_vdd_scaling_run)
-    t_drv_analysis = threading.Thread(target=t_drv_analysis_run())
+    t_drv_analysis = threading.Thread(target=t_drv_analysis_run)
 
     t_standard_hold.start()
     t_standard_read.start()
