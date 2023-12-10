@@ -1,0 +1,53 @@
+* D:\Disco D\universita\magistrale\progettazione-low-power\progetti\progetto-2\ltspice\models\gaussian-vth\hold\gaussian_vth_hold.asc
+Vsweep u NC_01 {vsweep}
+E1 N001 N003 V1 0 {e1}
+E2 N003 NC_02 u 0 {e2}
+M1 VDD N001 Vout1 VDD EECMOSP1 l={l_pmos_q} w={w_pmos_q}
+M2 Vout1 N001 0 0 EECMOSN1 l={l_nmos_q} w={w_nmos_q}
+E3 V1 N002 u 0 {e3}
+E4 N002 0 Vout1 0 {e4}
+E5 V2 N005 u 0 {e5}
+E6 N005 0 Vout2 0 {e6}
+E7 N004 N006 V2 0 {e7}
+E8 N006 NC_03 u 0 {e8}
+M3 VDD N004 Vout2 VDD EECMOSP1 l={l_pmos_q_neg} w={w_pmos_q_neg}
+M4 Vout2 N004 0 0 EECMOSN1 l={l_nmos_q_neg} w={w_nmos_q_neg}
+Vdd VDD 0 {vdd}
+M5 BL WL Vout1 NC_04 EECMOSN1 l={l_ax} w={w_ax}
+Vwl WL 0 {vwl}
+Vbl BL 0 {vbl}
+M6 BLneg WL Vout2 NC_05 EECMOSN1 l={l_ax} w={w_ax}
+Vblneg BLneg 0 {vblneg}
+.model NMOS NMOS
+.model PMOS PMOS
+.lib C:\Users\giorg\AppData\Local\LTspice\lib\cmp\standard.mos
+.PARAM l_ax=0.12u  ; Batch instruction
+.PARAM w_ax=0.13u  ; Batch instruction
+.PARAM l_pmos_q=0.12u  ; Batch instruction
+.PARAM w_pmos_q=0.12u  ; Batch instruction
+.PARAM l_nmos_q=0.12u  ; Batch instruction
+.PARAM w_nmos_q=0.48u  ; Batch instruction
+.PARAM l_pmos_q_neg=0.12u  ; Batch instruction
+.PARAM w_pmos_q_neg=0.12u  ; Batch instruction
+.PARAM l_nmos_q_neg=0.12u  ; Batch instruction
+.PARAM w_nmos_q_neg=0.48u  ; Batch instruction
+.PARAM vdd=0.25  ; Batch instruction
+.PARAM vwl=0  ; Batch instruction
+.PARAM vbl=0.25  ; Batch instruction
+.PARAM vblneg=0.25  ; Batch instruction
+.PARAM vsweep=1  ; Batch instruction
+.PARAM e1=0.707  ; Batch instruction
+.PARAM e2=0.707  ; Batch instruction
+.PARAM e3=1  ; Batch instruction
+.PARAM e4=1.41  ; Batch instruction
+.PARAM e5=-1  ; Batch instruction
+.PARAM e6=1.41  ; Batch instruction
+.PARAM e7=0.707  ; Batch instruction
+.PARAM e8=-0.707  ; Batch instruction
+.inc ../../../../../../ltspice/utils/utils-montecarlo-experiments/RIT_Models_For_LTSPICE_MonteCarlo.txt
+.dc Vsweep -0.17674999999999952 0.17674999999999952 0.01
+.step param run 1 400 1
+.measure dc snm_max MAX(0.707*v(V1)-0.707*v(V2))
+.measure dc snm_min MIN(0.707*v(V1)-0.707*v(V2))
+.backanno
+.end

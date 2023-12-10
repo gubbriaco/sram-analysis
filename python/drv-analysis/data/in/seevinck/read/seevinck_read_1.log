@@ -1,0 +1,101 @@
+Circuit: * D:\Disco D\universita\magistrale\progettazione-low-power\progetti\progetto-2\ltspice\models\seevinck\read\seevinck_read.asc
+
+WARNING: Node NC_01 is floating.
+WARNING: Node NC_02 is floating.
+WARNING: Node NC_03 is floating.
+WARNING: Node NC_04 is floating.
+WARNING: Node NC_05 is floating.
+
+WARNING: Less than two connections to node nc_01.  This node is used by vsweep.
+WARNING: Less than two connections to node nc_02.  This node is used by e2.
+WARNING: Less than two connections to node nc_03.  This node is used by e8.
+WARNING: Less than two connections to node nc_04.  This node is used by m5.
+WARNING: Less than two connections to node nc_05.  This node is used by m6.
+Warning: Pd = 0 is less than W.
+Warning: Ps = 0 is less than W.
+Warning: Pd = 0 is less than W.
+Warning: Ps = 0 is less than W.
+Warning: Pd = 0 is less than W.
+Warning: Ps = 0 is less than W.
+.step w_ax=1.2e-07
+.step w_ax=1.3e-07
+.step w_ax=1.4e-07
+.step w_ax=1.5e-07
+.step w_ax=1.6e-07
+.step w_ax=1.7e-07
+.step w_ax=1.8e-07
+.step w_ax=1.9e-07
+.step w_ax=2e-07
+.step w_ax=2.1e-07
+.step w_ax=2.2e-07
+.step w_ax=2.3e-07
+.step w_ax=2.4e-07
+
+
+Measurement: snm_max
+  step	MAX(0.655*v(v1)-0.655*v(v2))	FROM	TO
+     1	0.142214	-0.655	0.655
+     2	0.134805	-0.655	0.655
+     3	0.127669	-0.655	0.655
+     4	0.120789	-0.655	0.655
+     5	0.114147	-0.655	0.655
+     6	0.107742	-0.655	0.655
+     7	0.101551	-0.655	0.655
+     8	0.0955539	-0.655	0.655
+     9	0.0897406	-0.655	0.655
+    10	0.0841013	-0.655	0.655
+    11	0.0786269	-0.655	0.655
+    12	0.0733094	-0.655	0.655
+    13	0.068141	-0.655	0.655
+
+Measurement: snm_min
+  step	MIN(0.655*v(v1)-0.655*v(v2))	FROM	TO
+     1	-0.142214	-0.655	0.655
+     2	-0.134805	-0.655	0.655
+     3	-0.127669	-0.655	0.655
+     4	-0.120789	-0.655	0.655
+     5	-0.114147	-0.655	0.655
+     6	-0.107742	-0.655	0.655
+     7	-0.101551	-0.655	0.655
+     8	-0.0955539	-0.655	0.655
+     9	-0.0897406	-0.655	0.655
+    10	-0.0841012	-0.655	0.655
+    11	-0.0786269	-0.655	0.655
+    12	-0.0733094	-0.655	0.655
+    13	-0.068141	-0.655	0.655
+
+Measurement: w_ax_values
+  step	w_ax
+     1	1.2e-07
+     2	1.3e-07
+     3	1.4e-07
+     4	1.5e-07
+     5	1.6e-07
+     6	1.7e-07
+     7	1.8e-07
+     8	1.9e-07
+     9	2e-07
+    10	2.1e-07
+    11	2.2e-07
+    12	2.3e-07
+    13	2.4e-07
+
+
+Date: Sun Dec 10 16:32:21 2023
+Total elapsed time: 1.993 seconds.
+
+tnom = 27
+temp = 27
+method = trap
+totiter = 271
+traniter = 0
+tranpoints = 0
+accept = 0
+rejected = 0
+matrix size = 33
+fillins = 28
+solver = Normal
+Avg thread counts: 7.2/0.0/8.0/7.2
+Matrix Compiler1: 2.14 KB object code size  1.0/0.7/[0.4]
+Matrix Compiler2: 2.78 KB object code size  0.5/0.7/[0.3]
+

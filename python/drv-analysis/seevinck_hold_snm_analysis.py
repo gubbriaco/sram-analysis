@@ -1,4 +1,4 @@
-from properties import vwl_hold, vbl_hold, vblneg_hold, vwl_read, vbl_read, vblneg_read, w_ax_range
+from properties import vwl_hold, vbl_hold, vblneg_hold, w_ax_range
 from properties import vdd_seevinck
 from properties import vsweep_seevinck
 from properties import rit_models, dc_vsweep_seevinck, snm_max, snm_min, w_ax_step_param_seevinck, save_w_ax_seevinck

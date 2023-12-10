@@ -7,10 +7,38 @@ import os
 def snm_ileak_vdd_scaling_comparative_analysis(
         vdd_gaussian_vth_scaled,
         snm_gaussian_vth_hold_mean,
+        snm_gaussian_vth_hold_stdev,
         snm_gaussian_vth_read_mean,
+        snm_gaussian_vth_read_stdev,
         vdd_standard_transient_scaled,
-        i_leak_standard_transient_hold_mean
+        i_leak_standard_transient_hold_mean,
+        i_leak_standard_transient_hold_stdev
 ):
+    print("{:<10} {:<25} {:<25} {:<50}".format("VDD", "SNM(HOLD)", "SNM(READ)", "I_LEAK"))
+    for (
+            vdd,
+            snm_hold_mean,
+            snm_hold_stdev,
+            snm_read_mean,
+            snm_read_stdev,
+            ileak_mean,
+            i_leak_stdev
+    ) in zip(
+        vdd_standard_transient_scaled,
+        snm_gaussian_vth_hold_mean,
+        snm_gaussian_vth_hold_stdev,
+        snm_gaussian_vth_read_mean,
+        snm_gaussian_vth_read_stdev,
+        i_leak_standard_transient_hold_mean,
+        i_leak_standard_transient_hold_stdev
+    ):
+        vdd_str = f'{vdd} V'
+        snm_hold_str = f'({round(snm_hold_mean, 3)} mV, {round(snm_hold_stdev, 3)} mV)'
+        snm_read_str = f'({round(snm_read_mean, 3)} mV, {round(snm_read_stdev, 3)} mV)'
+        ileak_str = f'({ileak_mean} A, {i_leak_stdev} A)'
+        print("{:<10} {:<25} {:<25} {:<50}".format(vdd_str, snm_hold_str, snm_read_str, ileak_str))
+
+
     fig_table_1, axs_table_1 = plt.subplots(1, 3, figsize=(16, 4))
     plt.suptitle("VDD SCALING")
 

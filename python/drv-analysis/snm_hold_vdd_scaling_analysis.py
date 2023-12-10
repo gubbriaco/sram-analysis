@@ -1,20 +1,15 @@
 from properties import vwl_hold
 from properties import vsweep_gaussian_vth
 from properties import snm_max, snm_min, rit_models_montecarlo, dc_vsweep_gaussian_vth, step_param_run_gaussian_vth
-from utils.path import ltspice, schematics, images, data
+from utils.path import ltspice, schematics, data
 from utils.patterns import snm_max_seevinck_pattern, snm_min_seevinck_pattern
-from models.ops import save_image, get_data, __init_model__, CircuitType, OperationType, RequestPlotSchematic
-from matplotlib import pyplot as plt
+from models.ops import get_data, __init_model__, CircuitType, OperationType, RequestPlotSchematic
 import os
 from statistics import mean, stdev
-from IPython.display import Image, display
 import numpy as np
 
 
 def snm_hold_vdd_scaling_analysis():
-    schematic_image_path = os.path.join(schematics, "gaussian_vth.png")
-    display(Image(schematic_image_path))
-
     iterations_scaling = 16
     rows = round(int(np.sqrt(iterations_scaling)))
     tmp = iterations_scaling % rows
@@ -24,8 +19,6 @@ def snm_hold_vdd_scaling_analysis():
     elif tmp == 2:
         iterations = iterations_scaling + (rows - 2)
     cols = int(iterations / rows)
-    fig_hold_snm, axs_hold_snm = plt.subplots(rows, cols, figsize=(16, 6))
-    plt.suptitle("Hold Operation DC Simulation VDD Scaling")
     vdd_start = 1.0
     vdd_stop = vdd_start - (iterations / 10)
     vdd_step = 0.05
@@ -35,6 +28,7 @@ def snm_hold_vdd_scaling_analysis():
     vdd_gaussian_vth_scaled = []
     snm_gaussian_vth_hold_mean = []
     snm_gaussian_vth_hold_stdev = []
+    snm_hold_array = []
     for scaling in np.arange(vdd_start, vdd_stop, -vdd_step):
         if row == rows:
             break
@@ -108,15 +102,11 @@ def snm_hold_vdd_scaling_analysis():
             for val in snm_hold:
                 file.write(f'{val}\n')
 
-        axs_hold_snm[row, col].hist(snm_hold, bins=100, edgecolor='black')
-        axs_hold_snm[row, col].set_xlabel("SNM(HOLD)")
-        axs_hold_snm[row, col].set_ylabel("#")
-        axs_hold_snm[row, col].set_title(f"vdd={vdd_scaled} V Histogram")
-
         snm_mean = mean(snm_hold)
         snm_stdev = stdev(snm_hold)
         snm_gaussian_vth_hold_mean.append(snm_mean)
         snm_gaussian_vth_hold_stdev.append(snm_stdev)
+        snm_hold_array.append(snm_hold)
 
         print(f'snm_mean_gaussian_vth_hold[{vdd_scaled}V] = {snm_mean} mV', flush=True)
         print(f'snm_stdev_gaussian_vth_hold[{vdd_scaled}V] = {snm_stdev} mV')
@@ -127,10 +117,9 @@ def snm_hold_vdd_scaling_analysis():
         else:
             col = col + 1
 
-    plt.figure()
-    plt.tight_layout()
-    plt.subplots_adjust(hspace=1.5, wspace=1)
-    save_image(image_path=os.path.join(images, "hold_operation_dc_vdd_scaling.png"), plt=plt)
-    plt.show()
-
-    return vdd_gaussian_vth_scaled, snm_gaussian_vth_hold_mean, snm_gaussian_vth_hold_stdev
+    return (
+        snm_hold_array,
+        vdd_gaussian_vth_scaled,
+        snm_gaussian_vth_hold_mean,
+        snm_gaussian_vth_hold_stdev
+    )

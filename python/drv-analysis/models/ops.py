@@ -270,7 +270,7 @@ def __init_standard__(
     for param in params:
         standard_netlist.add_instructions(param)
 
-    standard_runner = SimRunner(output_folder=f"{data}/standard/{operation}/")
+    standard_runner = SimRunner(output_folder=f"{data}/in/standard/{operation}/")
     standard_runner.run(netlist=standard_netlist, timeout=3600)
     print('Successful/Total Simulations: ' + str(standard_runner.okSim) + '/' + str(standard_runner.runno), flush=True)
 
@@ -364,7 +364,7 @@ def __init_seevinck__(
     for param in params:
         seevinck_netlist.add_instructions(param)
 
-    seevinck_runner = SimRunner(output_folder=f"{data}/seevinck/{operation}/")
+    seevinck_runner = SimRunner(output_folder=f"{data}/in/seevinck/{operation}/")
     seevinck_runner.run(netlist=seevinck_netlist, timeout=3600)
     print('Successful/Total Simulations: ' + str(seevinck_runner.okSim) + '/' + str(seevinck_runner.runno), flush=True)
 
@@ -458,7 +458,7 @@ def __init_gaussian_vth_dc__(
     for param in params:
         gaussian_vth_dc_netlist.add_instructions(param)
 
-    gaussian_vth_dc_runner = SimRunner(output_folder=f"{data}/gaussian-vth/{operation}/")
+    gaussian_vth_dc_runner = SimRunner(output_folder=f"{data}/in/gaussian-vth/{operation}/")
     gaussian_vth_dc_runner.run(netlist=gaussian_vth_dc_netlist, timeout=3600)
     print('Successful/Total Simulations: ' + str(gaussian_vth_dc_runner.okSim) + '/' + str(
         gaussian_vth_dc_runner.runno), flush=True)
@@ -546,7 +546,7 @@ def __init_standard_transient__(
     for param in params:
         standard_transient_netlist.add_instructions(param)
 
-    standard_transient_runner = SimRunner(output_folder=f"{data}/standard/{operation}/")
+    standard_transient_runner = SimRunner(output_folder=f"{data}/in/standard/{operation}/")
     standard_transient_runner.run(netlist=standard_transient_netlist, timeout=3600)
     print('Successful/Total Simulations: ' + str(standard_transient_runner.okSim) + '/' + str(
         standard_transient_runner.runno), flush=True)

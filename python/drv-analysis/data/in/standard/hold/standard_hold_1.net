@@ -1,0 +1,34 @@
+* D:\Disco D\universita\magistrale\progettazione-low-power\progetti\progetto-2\ltspice\models\standard\hold\transient\standard_hold.asc
+M3 Qneg Q 0 0 EECMOSN1 l={l_nmos_q_neg} w={w_nmos_q_neg}
+M4 VDD Q Qneg VDD EECMOSP1 l={l_pmos_q_neg} w={w_pmos_q_neg}
+Vdd VDD 0 {vdd}
+M5 Q Qneg 0 0 EECMOSN1 l={l_nmos_q} w={w_nmos_q}
+M6 VDD Qneg Q VDD EECMOSP1 l={l_pmos_q} w={w_pmos_q}
+M7 Q WL BL 0 EECMOSN1 l={l_ax} w={w_ax}
+M8 BLneg WL Qneg 0 EECMOSN1 l={l_ax} w={w_ax}
+Vblneg BLneg 0 0.25
+Vbl BL 0 0.25
+Vwl WL 0 {vwl}
+Vsweep Qneg 0 {vsweep}
+.model NMOS NMOS
+.model PMOS PMOS
+.lib C:\Users\giorg\AppData\Local\LTspice\lib\cmp\standard.mos
+* Transient Simulation setup to get the i_leak of an SRAM cell.
+.PARAM l_ax=0.12u  ; Batch instruction
+.PARAM w_ax=0.13u  ; Batch instruction
+.PARAM l_pmos_q=0.12u  ; Batch instruction
+.PARAM w_pmos_q=0.12u  ; Batch instruction
+.PARAM l_nmos_q=0.12u  ; Batch instruction
+.PARAM w_nmos_q=0.48u  ; Batch instruction
+.PARAM l_pmos_q_neg=0.12u  ; Batch instruction
+.PARAM w_pmos_q_neg=0.12u  ; Batch instruction
+.PARAM l_nmos_q_neg=0.12u  ; Batch instruction
+.PARAM w_nmos_q_neg=0.48u  ; Batch instruction
+.PARAM vdd=0.25  ; Batch instruction
+.PARAM vsweep=1  ; Batch instruction
+.PARAM vwl=0  ; Batch instruction
+.inc ../../../../../../ltspice/utils/utils-montecarlo-experiments/RIT_Models_For_LTSPICE_MonteCarlo.txt
+.step param run 1 400 1
+.dc Vsweep 0 1 0.01
+.backanno
+.end
