@@ -2,6 +2,15 @@ import os
 from statistics import mean, stdev
 
 
+def get_values_from_file(
+        file_path
+):
+    values = []
+    with open(file_path, 'r') as file:
+        values = [float(line.strip()) for line in file]
+    return values
+
+
 def get_values_from_dir(
         files_dir_path
 ):

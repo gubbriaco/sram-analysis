@@ -4,6 +4,9 @@ from utils.path import rit_models_for_ltspice_file_path, rit_models_for_ltspice_
 ########################################################################################################################
 # COMMON PARAMETERS
 
+# w-ax pick
+w_ax_pos = 1
+
 # rit-models
 rit_models = f'.inc {rit_models_for_ltspice_file_path}'
 

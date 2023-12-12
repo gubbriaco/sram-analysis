@@ -51,7 +51,7 @@ def ileak_hold_vdd_scaling_analysis():
         ) = __init_model__(
             operation_type=OperationType.HOLD,
             circuit_type=CircuitType.STANDARD_TRANSIENT,
-            asc_file_path=os.path.join(ltspice, "standard/hold/transient/standard_hold.asc"),
+            asc_file_path=os.path.join(ltspice, "standard/hold/transient/standard_hold_ileak.asc"),
             schematic_image_path=os.path.join(schematics, "standard_transient.png"),
             request_plot_schematic=RequestPlotSchematic.FALSE,
             vdd=f'{vdd_scaled}',
