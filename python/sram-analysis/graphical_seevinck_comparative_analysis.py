@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 import os
 from utils.path import images, data
 from utils.dir import get_values_from_file
-from models.ops import save_image
+from models.ops import save_image, table_creation
 
 
 def graphical_seevinck_comparative_analysis():
@@ -46,6 +46,32 @@ def graphical_seevinck_comparative_analysis():
     plt.grid()
     save_image(image_path=os.path.join(images, "difference_snm_w_ax.png"), plt=plt)
     plt.show()
+
+    data_table = {
+        'w_ax [m]': w_ax_hold,
+        'snm(hold)_standard [mV]': snm_hold_standard,
+        'snm(read)_standard [mV]': snm_read_standard,
+        'snm(hold)_seevinck [mV]': snm_hold_seevinck,
+        'snm(read)_seevinck [mV]': snm_read_seevinck
+    }
+    table_creation(
+        data_table=data_table,
+        title_plot="Comparative Analysis Graphical-Seevinck",
+        title_image_saving="table_comparative_analysis_graphical_seevinck.png",
+        figsize=[16, 4]
+    )
+
+    data_table = {
+        'w_ax [m]': w_ax_hold,
+        'diff_snm_hold [%]': percentage_difference_snm_hold,
+        'diff_snm_read [%]': percentage_difference_snm_read
+    }
+    table_creation(
+        data_table=data_table,
+        title_plot="Comparative Analysis %Difference Graphical-Seevinck",
+        title_image_saving="table_comparative_analysis_difference_snm_w_ax_graphical_seevinck.png",
+        figsize=[12, 4]
+    )
 
 
 if __name__ == "__main__":

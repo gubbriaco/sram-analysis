@@ -5,7 +5,8 @@ from properties import rit_models, dc_vsweep_seevinck, snm_max, snm_min, w_ax_st
 from utils.path import ltspice, schematics, images, data
 from utils.patterns import w_ax_seevinck_pattern, snm_max_seevinck_pattern, snm_min_seevinck_pattern
 from models.snm import graphical_processing, rotate_points, seevinck_processing, RequestPlot
-from models.ops import save_image, get_data, __init_model__, CircuitType, OperationType, RequestPlotSchematic
+from models.ops import (save_image, get_data, __init_model__, CircuitType, OperationType, RequestPlotSchematic,
+                        table_creation)
 from matplotlib import pyplot as plt
 import os
 from properties import w_ax_pos
@@ -196,6 +197,18 @@ def seevinck_hold_snm_analysis():
     with open(snm_hold_seevinck_file_path, 'w') as file:
         for val in snm_seevinck_hold:
             file.write(f'{val}\n')
+
+    data_table = {
+        'w_ax [m]': w_ax_seevinck_hold,
+        'snm(hold)_max_seevinck [mV]': snm_max_seevinck_hold,
+        'snm(hold)_min_seevinck [mV]': snm_min_seevinck_hold
+    }
+    table_creation(
+        data_table=data_table,
+        title_plot="Comparative Analysis W_AX-SNM(HOLD)_MAX-SNM(HOLD)_MIN Seevinck Method",
+        title_image_saving="table_comparative_wax_snm_max_min_hold_seevinck.png",
+        figsize=[18, 4]
+    )
 
 
 if __name__ == "__main__":

@@ -1,8 +1,8 @@
 from utils.dir import get_values_from_dir, get_mean_from_file, get_stdev_from_file
 from utils.path import images
-from models.ops import save_image
-import pandas as pd
+from models.ops import save_image, table_creation
 import matplotlib.pyplot as plt
+import pandas as pd
 from pandas.plotting import table
 import os
 import numpy as np
@@ -163,7 +163,7 @@ def snm_ileak_vdd_scaling_comparative_analysis():
 
     p_leak_standard_hold_mean = [ileakmean * vdd for ileakmean, vdd in zip(i_leak_standard_hold_mean, vdd_scaled)]
     p_leak_standard_hold_stdev = [ileakstdev * vdd for ileakstdev, vdd in zip(i_leak_standard_hold_stdev, vdd_scaled)]
-    data = {
+    data_table_comparative_analysis_vdd_scaling = {
         'vdd [V]': vdd_scaled,
         'snm(hold)_mean [mV]': [round(val, 5) for val in snm_gaussian_vth_hold_mean],
         'snm(hold)_stdev [mV]': [round(val, 5) for val in snm_gaussian_vth_hold_stdev],
@@ -174,28 +174,12 @@ def snm_ileak_vdd_scaling_comparative_analysis():
         'pleak(hold)_mean [W]': [round(val, 11) for val in p_leak_standard_hold_mean],
         'pleak(hold)_stdev [W]': [round(val, 11) for val in p_leak_standard_hold_stdev]
     }
-    df = pd.DataFrame(data)
-    blankIndex = [''] * len(df)
-    df.index = blankIndex
-
-    fig_table_comparative, ax_table_comparative = plt.subplots(figsize=(22, 5))
-    ax_table_comparative.set_frame_on(False)
-    tab = table(
-        ax_table_comparative,
-        df,
-        loc='center',
-        colWidths=[0.14] * len(df.columns),
-        cellLoc='center'
+    table_creation(
+        data_table=data_table_comparative_analysis_vdd_scaling,
+        title_plot="Comparative Analysis VDD Scaling",
+        title_image_saving="table_comparative_analysis_vdd_scaling.png",
+        figsize=[22, 6]
     )
-    tab.auto_set_font_size(False)
-    tab.set_fontsize(11)
-    tab.scale(1.2, 1.2)
-
-    ax_table_comparative.axis('off')
-
-    fig_table_comparative.tight_layout()
-    save_image(image_path=os.path.join(images, "table_comparative_analysis_vdd_scaling.png"), plt=plt)
-    plt.show()
 
 
 if __name__ == "__main__":

@@ -5,7 +5,8 @@ from properties import rit_models, dc_vsweep_standard, w_ax_step_param_standard,
 from utils.path import ltspice, schematics, images, data
 from utils.patterns import w_ax_standard_pattern
 from models.snm import graphical_processing, RequestPlot
-from models.ops import save_image, get_data, __init_model__, CircuitType, OperationType, RequestPlotSchematic
+from models.ops import (save_image, get_data, __init_model__, CircuitType, OperationType, RequestPlotSchematic,
+                        table_creation)
 from matplotlib import pyplot as plt
 import os
 from properties import w_ax_pos
@@ -129,6 +130,17 @@ def standard_hold_snm_analysis():
     with open(snm_hold_standard_file_path, 'w') as file:
         for val in snm_standard_hold:
             file.write(f'{val}\n')
+
+    data_table = {
+        'w_ax [m]': w_ax_standard_hold,
+        'snm(hold)_standard [mV]': snm_standard_hold
+    }
+    table_creation(
+        data_table=data_table,
+        title_plot="Comparative Analysis W_AX-SNM(HOLD) Graphical Method",
+        title_image_saving="table_comparative_wax_snm_hold_standard.png",
+        figsize=[16, 4]
+    )
 
 
 if __name__ == "__main__":

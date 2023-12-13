@@ -23,10 +23,14 @@ from properties import (
     l_nmos_q_standard_ileak, w_nmos_q_standard_ileak, l_pmos_q_neg_standard_ileak,
     w_pmos_q_neg_standard_ileak, l_nmos_q_neg_standard_ileak, w_nmos_q_neg_standard_ileak
 )
-from utils.path import data
+from utils.path import data, images
 import re
 from PyLTSpice import SimRunner
 import numpy as np
+import pandas as pd
+from pandas.plotting import table
+from matplotlib import pyplot as plt
+import os
 
 
 def load_schematic(schematic_image_path: str) -> None:
@@ -89,6 +93,43 @@ def save_image(image_path: str, plt: pyplot) -> None:
 
     # Salva l'immagine utilizzando l'oggetto pyplot
     plt.savefig(image_path, format='png')
+
+
+def table_creation(
+        data_table,
+        title_plot,
+        title_image_saving,
+        figsize
+):
+    df = pd.DataFrame(data_table)
+    blankIndex = [''] * len(df)
+    df.index = blankIndex
+
+    fig_table, ax_table = plt.subplots(figsize=(figsize[0], figsize[1]))
+    ax_table.set_frame_on(False)
+    ax_table.set_title(title_plot, fontsize=16, color='blue')
+    tab = table(
+        ax_table,
+        df,
+        loc='center',
+        colWidths=[0.14] * len(df.columns),
+        cellLoc='center'
+    )
+    tab.auto_set_font_size(False)
+    tab.set_fontsize(11)
+
+    for i, key in enumerate(df.keys()):
+        cell = tab[0, i]
+        cell.set_fontsize(12)
+        cell.set_text_props(weight='bold', color='black')
+        cell.set_facecolor('lightblue')
+
+    tab.scale(1.2, 1.2)
+    ax_table.axis('off')
+
+    fig_table.tight_layout()
+    save_image(image_path=os.path.join(images, title_image_saving), plt=plt)
+    plt.show()
 
 
 def get_data(pattern: str, content: str) -> list[float]:
