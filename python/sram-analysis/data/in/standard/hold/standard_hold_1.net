@@ -7,15 +7,14 @@ M5 Q Qneg 0 0 EECMOSN l={l_nmos_q} w={w_nmos_q}
 M6 VDD Qneg Q VDD EECMOSP l={l_pmos_q} w={w_pmos_q}
 M7 Q WL BL 0 EECMOSN l={l_ax} w={w_ax}
 M8 BLneg WL Qneg 0 EECMOSN l={l_ax} w={w_ax}
-Vblneg BLneg 0 0.95
-Vbl BL 0 0.95
+Vblneg BLneg 0 {vblneg}
+Vbl BL 0 {vbl}
 Vwl WL 0 {vwl}
 .model NMOS NMOS
 .model PMOS PMOS
 .lib C:\Users\giorg\AppData\Local\LTspice\lib\cmp\standard.mos
 * Simulation setup to get the SNM of an SRAM cell. Butterfly curve plotted manually
 .PARAM l_ax=0.12u  ; Batch instruction
-.PARAM w_ax=0.13u  ; Batch instruction
 .PARAM l_pmos_q=0.12u  ; Batch instruction
 .PARAM w_pmos_q=0.12u  ; Batch instruction
 .PARAM l_nmos_q=0.12u  ; Batch instruction
@@ -24,11 +23,14 @@ Vwl WL 0 {vwl}
 .PARAM w_pmos_q_neg=0.12u  ; Batch instruction
 .PARAM l_nmos_q_neg=0.12u  ; Batch instruction
 .PARAM w_nmos_q_neg=0.48u  ; Batch instruction
-.PARAM vdd=0.95  ; Batch instruction
-.PARAM vsweep=1  ; Batch instruction
+.PARAM vdd=1  ; Batch instruction
 .PARAM vwl=0  ; Batch instruction
-.inc ../../../../../../ltspice/utils/utils-montecarlo-experiments/RIT_Models_For_LTSPICE_MonteCarlo.txt
-.step param run 1 400 1
+.PARAM vbl=1  ; Batch instruction
+.PARAM vblneg=1  ; Batch instruction
+.PARAM vsweep=1  ; Batch instruction
+.inc ../../../../../../ltspice/utils/utils-montecarlo-experiments/RIT_Models_For_LTSPICE.txt
 .dc Vsweep 0 1 0.01
+.step param w_ax 0.12u 0.24u 0.01u
+.meas w_ax_values param w_ax
 .backanno
 .end

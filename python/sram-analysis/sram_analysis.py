@@ -43,58 +43,6 @@ snm_read_vdd_scaling_plotting_semaphore = threading.Semaphore(0)
 ileak_hold_vdd_scaling_plotting_semaphore = threading.Semaphore(0)
 
 
-def t_standard_hold_run():
-    global w_ax_standard_hold, snm_standard_hold
-    (
-        w_ax_standard_hold,
-        snm_standard_hold
-    ) = standardhold(
-        w_ax_pos,
-        print_lock,
-        plot_lock
-    )
-    graphical_seevinck_comparative_analysis_semaphore.release()
-
-
-def t_standard_read_run():
-    global w_ax_standard_read, snm_standard_read
-    (
-        w_ax_standard_read,
-        snm_standard_read
-    ) = standardread(
-        w_ax_pos,
-        print_lock,
-        plot_lock
-    )
-    graphical_seevinck_comparative_analysis_semaphore.release()
-
-
-def t_seevinck_hold_run():
-    global w_ax_seevinck_hold, snm_seevinck_hold
-    (
-        w_ax_seevinck_hold,
-        snm_seevinck_hold
-    ) = seevinckhold(
-        w_ax_pos,
-        print_lock,
-        plot_lock
-    )
-    graphical_seevinck_comparative_analysis_semaphore.release()
-
-
-def t_seevinck_read_run():
-    global w_ax_seevinck_read, snm_seevinck_read
-    (
-        w_ax_seevinck_read,
-        snm_seevinck_read
-    ) = seevinckread(
-        w_ax_pos,
-        print_lock,
-        plot_lock
-    )
-    graphical_seevinck_comparative_analysis_semaphore.release()
-
-
 def t_graphical_seevinck_comparative_analysis_run():
     graphical_seevinck_comparative_analysis_semaphore.acquire()
     graphical_seevinck_comparative_analysis_semaphore.acquire()

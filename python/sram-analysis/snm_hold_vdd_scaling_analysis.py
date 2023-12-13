@@ -123,3 +123,7 @@ def snm_hold_vdd_scaling_analysis():
         snm_gaussian_vth_hold_mean,
         snm_gaussian_vth_hold_stdev
     )
+
+
+if __name__ == "__main__":
+    snm_hold_vdd_scaling_analysis()

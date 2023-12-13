@@ -122,3 +122,7 @@ def snm_read_vdd_scaling_analysis():
         snm_gaussian_vth_read_mean,
         snm_gaussian_vth_read_stdev
     )
+
+
+if __name__ == "__main__":
+    snm_read_vdd_scaling_analysis()
