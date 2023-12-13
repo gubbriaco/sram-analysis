@@ -29,6 +29,6 @@ Vsweep Qneg 0 {vsweep}
 .PARAM vwl=0  ; Batch instruction
 .inc ../../../../../../ltspice/utils/utils-montecarlo-experiments/RIT_Models_For_LTSPICE_MonteCarlo.txt
 .step param run 1 400 1
-.dc Vsweep 0 1 0.01
+.dc Vsweep 0 0.25 0.0025
 .backanno
 .end

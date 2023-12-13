@@ -230,6 +230,12 @@ vdd_standard_ileak = '1'
 # vsweep
 vsweep_standard_ileak = '1'
 
+
+# vsweep-scaling
+def dc_vsweep_scaling(vdd_scaled):
+    return f'.dc Vsweep {0} {vdd_scaled} {vdd_scaled/100}'
+
+
 # tran
 tran_standard_range = '150n'
 tran_standard = f'.tran {tran_standard_range}'

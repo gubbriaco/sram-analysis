@@ -1,0 +1,1 @@
+.measure pleak find (abs(Id(M7))+abs(Id(M6))abs(Id(M3)))*v(Vdd) when Vsweep=1

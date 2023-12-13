@@ -6,11 +6,21 @@ from models.ops import save_image
 
 
 def graphical_seevinck_comparative_analysis():
-    w_ax = get_values_from_file(os.path.join(data, 'out', 'hold', 'snm', 'standard', 'wax_hold_standard.txt'))
-    snm_hold_standard = get_values_from_file(os.path.join(data, 'out', 'hold', 'snm', 'standard', 'snm_hold_standard.txt'))
-    snm_read_standard = get_values_from_file(os.path.join(data, 'out', 'read', 'snm', 'standard', 'snm_read_standard.txt'))
-    snm_hold_seevinck = get_values_from_file(os.path.join(data, 'out', 'hold', 'snm', 'seevinck', 'snm_hold_seevinck.txt'))
-    snm_read_seevinck = get_values_from_file(os.path.join(data, 'out', 'read', 'snm', 'seevinck', 'snm_read_seevinck.txt'))
+    w_ax = get_values_from_file(os.path.join(
+        data, 'out', 'hold', 'snm', 'standard', 'wax_hold_standard.txt')
+    )
+    snm_hold_standard = get_values_from_file(os.path.join(
+        data, 'out', 'hold', 'snm', 'standard', 'snm_hold_standard.txt')
+    )
+    snm_read_standard = get_values_from_file(os.path.join(
+        data, 'out', 'read', 'snm', 'standard', 'snm_read_standard.txt')
+    )
+    snm_hold_seevinck = get_values_from_file(os.path.join(
+        data, 'out', 'hold', 'snm', 'seevinck', 'snm_hold_seevinck.txt')
+    )
+    snm_read_seevinck = get_values_from_file(os.path.join(
+        data, 'out', 'read', 'snm', 'seevinck', 'snm_read_seevinck.txt')
+    )
 
     w_ax_hold = w_ax
     print("{:<20} {:<30} {:<30}".format("w_ax [u]", "%difference snm(hold) [%]", "%difference snm(read) [%]"))

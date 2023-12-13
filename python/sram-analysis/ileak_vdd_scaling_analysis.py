@@ -1,5 +1,5 @@
 from properties import vwl_hold
-from properties import dc_vsweep_standard, rit_models_montecarlo
+from properties import dc_vsweep_standard, rit_models_montecarlo, dc_vsweep_scaling
 from properties import vsweep_standard_ileak, step_param_run_standard_ileak
 from utils.path import ltspice, schematics, data
 from models.ops import __init_model__, CircuitType, OperationType, RequestPlotSchematic
@@ -59,7 +59,11 @@ def ileak_hold_vdd_scaling_analysis():
             vwl=vwl_hold,
             vbl=f'{vdd_scaled}',
             vblneg=f'{vdd_scaled}',
-            params=[rit_models_montecarlo, step_param_run_standard_ileak, dc_vsweep_standard]
+            params=[
+                rit_models_montecarlo,
+                step_param_run_standard_ileak,
+                dc_vsweep_scaling(vdd_scaled)
+            ]
         )
 
         i_leak_ax_q = i_leaks_standard_hold[0]
@@ -89,8 +93,10 @@ def ileak_hold_vdd_scaling_analysis():
         for i, value in enumerate(ileakpdqneg):
             ileakpdqneg_dc.append(value[len(value) - 1])
 
-        i_leak_hold = [value1 + value2 + value3 for value1, value2, value3 in
-                       zip(ileakaxq_dc, ileakpuq_dc, ileakpdqneg_dc)]
+        i_leak_hold = [
+            value1 + value2 + value3
+            for value1, value2, value3 in zip(ileakaxq_dc, ileakpuq_dc, ileakpdqneg_dc)
+        ]
 
         i_leak_hold_file_path = "ileak_hold_vdd_scaling"
         vdd_scaled_str = str(vdd_scaled).replace('.', '')
