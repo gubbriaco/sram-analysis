@@ -19,9 +19,9 @@ from properties import (
     e7_gaussian_vth, e8_gaussian_vth, w_ax_gaussian_vth
 )
 from properties import (
-    l_ax_standard_transient, w_ax_standard_transient, l_pmos_q_standard_transient, w_pmos_q_standard_transient,
-    l_nmos_q_standard_transient, w_nmos_q_standard_transient, l_pmos_q_neg_standard_transient,
-    w_pmos_q_neg_standard_transient, l_nmos_q_neg_standard_transient, w_nmos_q_neg_standard_transient
+    l_ax_standard_ileak, w_ax_standard_ileak, l_pmos_q_standard_ileak, w_pmos_q_standard_ileak,
+    l_nmos_q_standard_ileak, w_nmos_q_standard_ileak, l_pmos_q_neg_standard_ileak,
+    w_pmos_q_neg_standard_ileak, l_nmos_q_neg_standard_ileak, w_nmos_q_neg_standard_ileak
 )
 from utils.path import data
 import re
@@ -102,7 +102,7 @@ class CircuitType(Enum):
     STANDARD = 0
     SEEVINCK = 1
     GAUSSIAN_VTH_DC = 2
-    STANDARD_TRANSIENT = 3
+    STANDARD_ILEAK = 3
 
 
 class OperationType(Enum):
@@ -204,8 +204,8 @@ def __init_model__(
             vblneg=vblneg,
             params=params
         )
-    elif circuit_type == CircuitType.STANDARD_TRANSIENT:
-        steps, x, ileaks, vq, vqneg, vdd, vwl, vbl, vblneg, log = __init_standard_transient__(
+    elif circuit_type == CircuitType.STANDARD_ILEAK:
+        steps, x, ileaks, vq, vqneg, vdd, vwl, vbl, vblneg, log = __init_standard_ileak__(
             operation=operation,
             asc_file_path=asc_file_path,
             schematic_image_path=schematic_image_path,
@@ -498,7 +498,7 @@ def __init_gaussian_vth_dc__(
     )
 
 
-def __init_standard_transient__(
+def __init_standard_ileak__(
         operation: str,
         asc_file_path: str,
         schematic_image_path: str,
@@ -521,67 +521,67 @@ def __init_standard_transient__(
     np.ndarray,
     str
 ]:
-    standard_transient_netlist = load_asc(
+    standard_ileak_netlist = load_asc(
         asc_file_path=asc_file_path
     )
     if request_plot_schematic == RequestPlotSchematic.TRUE:
         load_schematic(
             schematic_image_path=schematic_image_path
         )
-    standard_transient_netlist.set_parameter('l_ax', l_ax_standard_transient)
-    standard_transient_netlist.set_parameter('w_ax', w_ax_standard_transient)
-    standard_transient_netlist.set_parameter('l_pmos_q', l_pmos_q_standard_transient)
-    standard_transient_netlist.set_parameter('w_pmos_q', w_pmos_q_standard_transient)
-    standard_transient_netlist.set_parameter('l_nmos_q', l_nmos_q_standard_transient)
-    standard_transient_netlist.set_parameter('w_nmos_q', w_nmos_q_standard_transient)
-    standard_transient_netlist.set_parameter('l_pmos_q_neg', l_pmos_q_neg_standard_transient)
-    standard_transient_netlist.set_parameter('w_pmos_q_neg', w_pmos_q_neg_standard_transient)
-    standard_transient_netlist.set_parameter('l_nmos_q_neg', l_nmos_q_neg_standard_transient)
-    standard_transient_netlist.set_parameter('w_nmos_q_neg', w_nmos_q_neg_standard_transient)
-    standard_transient_netlist.set_parameter('vdd', vdd)
-    standard_transient_netlist.set_parameter('vsweep', vsweep)
-    standard_transient_netlist.set_parameter('vwl', vwl)
-    standard_transient_netlist.set_component_value('Vbl', vbl)
-    standard_transient_netlist.set_component_value('Vblneg', vblneg)
+    standard_ileak_netlist.set_parameter('l_ax', l_ax_standard_ileak)
+    standard_ileak_netlist.set_parameter('w_ax', w_ax_standard_ileak)
+    standard_ileak_netlist.set_parameter('l_pmos_q', l_pmos_q_standard_ileak)
+    standard_ileak_netlist.set_parameter('w_pmos_q', w_pmos_q_standard_ileak)
+    standard_ileak_netlist.set_parameter('l_nmos_q', l_nmos_q_standard_ileak)
+    standard_ileak_netlist.set_parameter('w_nmos_q', w_nmos_q_standard_ileak)
+    standard_ileak_netlist.set_parameter('l_pmos_q_neg', l_pmos_q_neg_standard_ileak)
+    standard_ileak_netlist.set_parameter('w_pmos_q_neg', w_pmos_q_neg_standard_ileak)
+    standard_ileak_netlist.set_parameter('l_nmos_q_neg', l_nmos_q_neg_standard_ileak)
+    standard_ileak_netlist.set_parameter('w_nmos_q_neg', w_nmos_q_neg_standard_ileak)
+    standard_ileak_netlist.set_parameter('vdd', vdd)
+    standard_ileak_netlist.set_parameter('vsweep', vsweep)
+    standard_ileak_netlist.set_parameter('vwl', vwl)
+    standard_ileak_netlist.set_component_value('Vbl', vbl)
+    standard_ileak_netlist.set_component_value('Vblneg', vblneg)
     for param in params:
-        standard_transient_netlist.add_instructions(param)
+        standard_ileak_netlist.add_instructions(param)
 
-    standard_transient_runner = SimRunner(output_folder=f"{data}/in/standard/{operation}/")
-    standard_transient_runner.run(netlist=standard_transient_netlist, timeout=3600)
-    print('Successful/Total Simulations: ' + str(standard_transient_runner.okSim) + '/' + str(
-        standard_transient_runner.runno), flush=True)
+    standard_ileak_runner = SimRunner(output_folder=f"{data}/in/standard/{operation}_ileak/")
+    standard_ileak_runner.run(netlist=standard_ileak_netlist, timeout=3600)
+    print('Successful/Total Simulations: ' + str(standard_ileak_runner.okSim) + '/' + str(
+        standard_ileak_runner.runno), flush=True)
 
-    standard_transient_raw = ""
-    standard_transient_log = ""
-    for raw, log in standard_transient_runner:
-        standard_transient_raw = raw
-        standard_transient_log = log
-        print("Raw file: %s, Log file: %s" % (standard_transient_raw, standard_transient_log), flush=True)
+    standard_ileak_raw = ""
+    standard_ileak_log = ""
+    for raw, log in standard_ileak_runner:
+        standard_ileak_raw = raw
+        standard_ileak_log = log
+        print("Raw file: %s, Log file: %s" % (standard_ileak_raw, standard_ileak_log), flush=True)
 
-    standard_transient_ltr = load_ltr(raw_file_path=standard_transient_raw)
-    v_1_standard_transient = standard_transient_ltr.get_trace("V(q)")
-    v_2_standard_transient = standard_transient_ltr.get_trace("V(qneg)")
-    v_dd_standard_transient = standard_transient_ltr.get_trace("V(vdd)")
-    v_wl_standard_transient = standard_transient_ltr.get_trace("V(wl)")
-    v_bl_standard_transient = standard_transient_ltr.get_trace("V(bl)")
-    v_blneg_standard_transient = standard_transient_ltr.get_trace("V(blneg)")
-    time = standard_transient_ltr.get_trace('vsweep')
-    steps = standard_transient_ltr.get_steps()
+    standard_ileak_ltr = load_ltr(raw_file_path=standard_ileak_raw)
+    v_1_standard_ileak = standard_ileak_ltr.get_trace("V(q)")
+    v_2_standard_ileak = standard_ileak_ltr.get_trace("V(qneg)")
+    v_dd_standard_ileak = standard_ileak_ltr.get_trace("V(vdd)")
+    v_wl_standard_ileak = standard_ileak_ltr.get_trace("V(wl)")
+    v_bl_standard_ileak = standard_ileak_ltr.get_trace("V(bl)")
+    v_blneg_standard_ileak = standard_ileak_ltr.get_trace("V(blneg)")
+    time = standard_ileak_ltr.get_trace('vsweep')
+    steps = standard_ileak_ltr.get_steps()
 
-    log = standard_transient_log
+    log = standard_ileak_log
 
-    i_leaks_standard_transient = get_ileaks(standard_transient_ltr, operation)
+    i_leaks_standard_ileak = get_ileaks(standard_ileak_ltr, operation)
 
     return (
         steps,
         time,
-        i_leaks_standard_transient,
-        v_1_standard_transient,
-        v_2_standard_transient,
-        v_dd_standard_transient,
-        v_wl_standard_transient,
-        v_bl_standard_transient,
-        v_blneg_standard_transient,
+        i_leaks_standard_ileak,
+        v_1_standard_ileak,
+        v_2_standard_ileak,
+        v_dd_standard_ileak,
+        v_wl_standard_ileak,
+        v_bl_standard_ileak,
+        v_blneg_standard_ileak,
         log
     )
 

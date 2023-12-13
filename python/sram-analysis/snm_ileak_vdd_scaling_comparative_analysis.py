@@ -48,8 +48,8 @@ def snm_ileak_vdd_scaling_comparative_analysis(plot_lock):
     snm_gaussian_vth_read_mean = get_mean_from_file(snm_read_values)
     snm_gaussian_vth_read_stdev = get_stdev_from_file(snm_read_values)
 
-    i_leak_standard_transient_hold_mean = get_mean_from_file(ileak_hold_values)
-    i_leak_standard_transient_hold_stdev = get_stdev_from_file(ileak_hold_values)
+    i_leak_standard_hold_mean = get_mean_from_file(ileak_hold_values)
+    i_leak_standard_hold_stdev = get_stdev_from_file(ileak_hold_values)
 
     print("{:<10} {:<25} {:<25} {:<50}".format("VDD", "SNM(HOLD)", "SNM(READ)", "I_LEAK"))
     for (
@@ -66,8 +66,8 @@ def snm_ileak_vdd_scaling_comparative_analysis(plot_lock):
         snm_gaussian_vth_hold_stdev,
         snm_gaussian_vth_read_mean,
         snm_gaussian_vth_read_stdev,
-        i_leak_standard_transient_hold_mean,
-        i_leak_standard_transient_hold_stdev
+        i_leak_standard_hold_mean,
+        i_leak_standard_hold_stdev
     ):
         vdd_str = f'{vdd} V'
         snm_hold_str = f'({round(snm_hold_mean, 3)} mV, {round(snm_hold_stdev, 3)} mV)'
@@ -93,7 +93,7 @@ def snm_ileak_vdd_scaling_comparative_analysis(plot_lock):
         axs_table_1[1].set_title("SNM(READ)")
         axs_table_1[1].grid()
 
-        axs_table_1[2].plot(vdd_scaled, i_leak_standard_transient_hold_mean)
+        axs_table_1[2].plot(vdd_scaled, i_leak_standard_hold_mean)
         axs_table_1[2].set_xlabel("vdd")
         axs_table_1[2].set_ylabel("i_leak")
         axs_table_1[2].legend(["i_leak"])
@@ -118,8 +118,8 @@ def snm_ileak_vdd_scaling_comparative_analysis(plot_lock):
         axs_table_2_1.legend(["snm_hold", "snm_read"], loc='upper left')
 
         axs_table_2_2 = axs_table_2_1.twinx()
-        axs_table_2_2.plot(vdd_scaled, i_leak_standard_transient_hold_mean, '-*', label='i_leak', color='green')
-        axs_table_2_2.text(vdd_scaled[7], i_leak_standard_transient_hold_mean[7], 'i_leak')
+        axs_table_2_2.plot(vdd_scaled, i_leak_standard_hold_mean, '-*', label='i_leak', color='green')
+        axs_table_2_2.text(vdd_scaled[7], i_leak_standard_hold_mean[7], 'i_leak')
         axs_table_2_2.set_ylabel("i_leak", color='green')
         axs_table_2_2.tick_params(axis='y', labelcolor='green')
         axs_table_2_2.legend(["i_leak"], loc='center left')
@@ -137,8 +137,8 @@ def snm_ileak_vdd_scaling_comparative_analysis(plot_lock):
         'snm(hold)_stdev [mV]': snm_gaussian_vth_hold_stdev,
         'snm(read)_mean [mV]': snm_gaussian_vth_read_mean,
         'snm(read)_stdev [mV]': snm_gaussian_vth_read_stdev,
-        'ileak(hold)_mean [A]': i_leak_standard_transient_hold_mean,
-        'ileak(hold)_stdev [A]': i_leak_standard_transient_hold_stdev
+        'ileak(hold)_mean [A]': i_leak_standard_hold_mean,
+        'ileak(hold)_stdev [A]': i_leak_standard_hold_stdev
     }
     df = pd.DataFrame(data)
     blankIndex = [''] * len(df)

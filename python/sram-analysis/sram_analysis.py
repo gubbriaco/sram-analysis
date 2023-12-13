@@ -4,15 +4,15 @@ import numpy as np
 import os
 from models.ops import save_image
 from utils.path import images
-from standard_hold_snm_analysis import standard_hold_snm_analysis as standardhold
-from standard_read_snm_analysis import standard_read_snm_analysis as standardread
-from seevinck_hold_snm_analysis import seevinck_hold_snm_analysis as seevinckhold
-from seevinck_read_snm_analysis import seevinck_read_snm_analysis as seevinckread
+from snm_hold_standard_analysis import standard_hold_snm_analysis as standardhold
+from snm_read_standard_analysis import standard_read_snm_analysis as standardread
+from snm_hold_seevinck_analysis import seevinck_hold_snm_analysis as seevinckhold
+from snm_read_seevinck_analysis import seevinck_read_snm_analysis as seevinckread
 from graphical_seevinck_comparative_analysis import \
     graphical_seevinck_comparative_analysis as graphicalseevinckcomparative
 from snm_hold_vdd_scaling_analysis import snm_hold_vdd_scaling_analysis as snmholdvddscaling
 from snm_read_vdd_scaling_analysis import snm_read_vdd_scaling_analysis as snmreadvddscaling
-from ileak_hold_vdd_scaling_analysis import ileak_hold_vdd_scaling_analysis as ileakvddscaling
+from ileak_vdd_scaling_analysis import ileak_hold_vdd_scaling_analysis as ileakvddscaling
 from snm_ileak_vdd_scaling_comparative_analysis import \
     snm_ileak_vdd_scaling_comparative_analysis as snmileakvddscalingcomparative
 from drv_analysis import drv_analysis as drvanalysis
@@ -257,12 +257,12 @@ def t_snm_read_vdd_scaling_plotting():
 def t_ileak_hold_vdd_scaling_run():
     ileak_hold_vdd_scaling_semaphore.acquire()
     ileak_hold_vdd_scaling_semaphore.acquire()
-    global vdd_standard_transient_scaled, i_leak_standard_transient_hold_mean, i_leak_standard_transient_hold_stdev
+    global vdd_standard_ileak_scaled, i_leak_standard_hold_mean, i_leak_standard_hold_stdev
     (
         i_leak_hold_array,
-        vdd_standard_transient_scaled,
-        i_leak_standard_transient_hold_mean,
-        i_leak_standard_transient_hold_stdev
+        vdd_standard_ileak_scaled,
+        i_leak_standard_hold_mean,
+        i_leak_standard_hold_stdev
     ) = ileakvddscaling()
     ileak_hold_vdd_scaling_plotting_semaphore.release()
     vdd_scaling_comparative_analysis_semaphore.release()
@@ -353,8 +353,8 @@ if __name__ == "__main__":
     vdd_gaussian_vth_scaled = None
     snm_gaussian_vth_hold_mean, snm_gaussian_vth_hold_stdev = None, None
     snm_gaussian_vth_read_mean, snm_gaussian_vth_read_stdev = None, None
-    vdd_standard_transient_scaled = None
-    i_leak_standard_transient_hold_mean, i_leak_standard_transient_hold_stdev = None, None
+    vdd_standard_ileak_scaled = None
+    i_leak_standard_hold_mean, i_leak_standard_hold_stdev = None, None
 
     t_standard_hold = threading.Thread(target=t_standard_hold_run)
     t_standard_read = threading.Thread(target=t_standard_read_run)

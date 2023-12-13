@@ -198,89 +198,89 @@ step_param_run_gaussian_vth = (
 )
 
 ########################################################################################################################
-# SNM STANDARD TRANSIENT
+# I LEAK STANDARD DC
 
 # AX
-l_ax_standard_transient = '0.12u'
-w_ax_standard_transient = '0.13u'
-w_ax_start_standard_transient = f'{w_ax_start}u'
-w_ax_stop_standard_transient = f'{w_ax_stop}u'
-w_ax_step_standard_transient = '0.01u'
-w_ax_step_param_standard_transient = (
+l_ax_standard_ileak = '0.12u'
+w_ax_standard_ileak = '0.13u'
+w_ax_start_standard_ileak = f'{w_ax_start}u'
+w_ax_stop_standard_ileak = f'{w_ax_stop}u'
+w_ax_step_standard_ileak = '0.01u'
+w_ax_step_param_standard_ileak = (
     f'.step param w_ax '
-    f'{w_ax_start_standard_transient} '
-    f'{w_ax_stop_standard_transient} '
-    f'{w_ax_step_standard_transient}'
+    f'{w_ax_start_standard_ileak} '
+    f'{w_ax_stop_standard_ileak} '
+    f'{w_ax_step_standard_ileak}'
 )
 
 # Q transistor
-l_pmos_q_standard_transient = '0.12u'
-w_pmos_q_standard_transient = '0.12u'
-l_nmos_q_standard_transient = '0.12u'
-w_nmos_q_standard_transient = '0.48u'
+l_pmos_q_standard_ileak = '0.12u'
+w_pmos_q_standard_ileak = '0.12u'
+l_nmos_q_standard_ileak = '0.12u'
+w_nmos_q_standard_ileak = '0.48u'
 
 # Q neg transistor
-l_pmos_q_neg_standard_transient = '0.12u'
-w_pmos_q_neg_standard_transient = '0.12u'
-l_nmos_q_neg_standard_transient = '0.12u'
-w_nmos_q_neg_standard_transient = '0.48u'
+l_pmos_q_neg_standard_ileak = '0.12u'
+w_pmos_q_neg_standard_ileak = '0.12u'
+l_nmos_q_neg_standard_ileak = '0.12u'
+w_nmos_q_neg_standard_ileak = '0.48u'
 
 # vdd
-vdd_standard_transient = '1'
+vdd_standard_ileak = '1'
 # vsweep
-vsweep_standard_transient = '1'
+vsweep_standard_ileak = '1'
 
 # tran
 tran_standard_range = '150n'
 tran_standard = f'.tran {tran_standard_range}'
 
-# vbl_hold transient
-vbl_hold_transient_vinitial = vdd_standard_transient
-vbl_hold_transient_von = '0'
-vbl_hold_transient_tdelay = '100p'
-vbl_hold_transient_trise = '10p'
-vbl_hold_transient_tfall = '10p'
-vbl_hold_transient_ton = '490p'
-vbl_hold_transient_tperiod = '1n'
-vbl_hold_transient = (
+# vbl_hold ileak
+vbl_hold_ileak_vinitial = vdd_standard_ileak
+vbl_hold_ileak_von = '0'
+vbl_hold_ileak_tdelay = '100p'
+vbl_hold_ileak_trise = '10p'
+vbl_hold_ileak_tfall = '10p'
+vbl_hold_ileak_ton = '490p'
+vbl_hold_ileak_tperiod = '1n'
+vbl_hold_ileak = (
     f'PULSE('
-    f'{vbl_hold_transient_vinitial} '
-    f'{vbl_hold_transient_von} '
-    f'{vbl_hold_transient_tdelay} '
-    f'{vbl_hold_transient_trise} '
-    f'{vbl_hold_transient_tfall} '
-    f'{vbl_hold_transient_ton} '
-    f'{vbl_hold_transient_tperiod}'
+    f'{vbl_hold_ileak_vinitial} '
+    f'{vbl_hold_ileak_von} '
+    f'{vbl_hold_ileak_tdelay} '
+    f'{vbl_hold_ileak_trise} '
+    f'{vbl_hold_ileak_tfall} '
+    f'{vbl_hold_ileak_ton} '
+    f'{vbl_hold_ileak_tperiod}'
     f')'
 )
 
-# vbl_neg_hold transient
-vblneg_hold_transient_vinitial = vdd_standard_transient
-vblneg_hold_transient_von = '0'
-vblneg_hold_transient_tdelay = '100p'
-vblneg_hold_transient_trise = '10p'
-vblneg_hold_transient_tfall = '10p'
-vblneg_hold_transient_ton = '490p'
-vblneg_hold_transient_tperiod = '1n'
-vblneg_hold_transient = (
+# vbl_neg_hold ileak
+vblneg_hold_ileak_vinitial = vdd_standard_ileak
+vblneg_hold_ileak_von = '0'
+vblneg_hold_ileak_tdelay = '100p'
+vblneg_hold_ileak_trise = '10p'
+vblneg_hold_ileak_tfall = '10p'
+vblneg_hold_ileak_ton = '490p'
+vblneg_hold_ileak_tperiod = '1n'
+vblneg_hold_ileak = (
     f'PULSE('
-    f'{vblneg_hold_transient_vinitial} '
-    f'{vblneg_hold_transient_von} '
-    f'{vblneg_hold_transient_tdelay} '
-    f'{vblneg_hold_transient_trise} '
-    f'{vblneg_hold_transient_tfall} '
-    f'{vblneg_hold_transient_ton} '
-    f'{vblneg_hold_transient_tperiod}'
+    f'{vblneg_hold_ileak_vinitial} '
+    f'{vblneg_hold_ileak_von} '
+    f'{vblneg_hold_ileak_tdelay} '
+    f'{vblneg_hold_ileak_trise} '
+    f'{vblneg_hold_ileak_tfall} '
+    f'{vblneg_hold_ileak_ton} '
+    f'{vblneg_hold_ileak_tperiod}'
     f')'
 )
 
 # step param run
-step_param_run_standard_transient_start = 1
-step_param_run_standard_transient_stop = 400
-step_param_run_standard_transient_step = 1
-step_param_run_standard_transient = (
+step_param_run_standard_ileak_start = 1
+step_param_run_standard_ileak_stop = 400
+step_param_run_standard_ileak_step = 1
+step_param_run_standard_ileak = (
     f'.step param run '
-    f'{step_param_run_standard_transient_start} '
-    f'{step_param_run_standard_transient_stop} '
-    f'{step_param_run_standard_transient_step}'
+    f'{step_param_run_standard_ileak_start} '
+    f'{step_param_run_standard_ileak_stop} '
+    f'{step_param_run_standard_ileak_step}'
 )

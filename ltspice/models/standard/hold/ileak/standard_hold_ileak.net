@@ -1,0 +1,18 @@
+* D:\Disco D\universita\magistrale\progettazione-low-power\progetti\progetto-2\ltspice\models\standard\hold\ileak\standard_hold_ileak.asc
+M3 Qneg Q 0 0 EECMOSN1 l={l_nmos_q_neg} w={w_nmos_q_neg}
+M4 VDD Q Qneg VDD EECMOSP1 l={l_pmos_q_neg} w={w_pmos_q_neg}
+Vdd VDD 0 {vdd}
+M5 Q Qneg 0 0 EECMOSN1 l={l_nmos_q} w={w_nmos_q}
+M6 VDD Qneg Q VDD EECMOSP1 l={l_pmos_q} w={w_pmos_q}
+M7 Q WL BL 0 EECMOSN1 l={l_ax} w={w_ax}
+M8 BLneg WL Qneg 0 EECMOSN1 l={l_ax} w={w_ax}
+Vblneg BLneg 0 {vblneg}
+Vbl BL 0 {vbl}
+Vwl WL 0 {vwl}
+Vsweep Qneg 0 {vsweep}
+.model NMOS NMOS
+.model PMOS PMOS
+.lib C:\Users\giorg\AppData\Local\LTspice\lib\cmp\standard.mos
+* Transient Simulation setup to get the i_leak of an SRAM cell.
+.backanno
+.end
