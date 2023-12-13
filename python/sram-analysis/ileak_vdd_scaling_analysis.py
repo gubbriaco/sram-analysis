@@ -92,11 +92,11 @@ def ileak_hold_vdd_scaling_analysis():
         i_leak_hold = [value1 + value2 + value3 for value1, value2, value3 in
                        zip(ileakaxq_dc, ileakpuq_dc, ileakpdqneg_dc)]
 
-        i_leak_hold_file_path = "ileak_hold"
+        i_leak_hold_file_path = "ileak_hold_vdd_scaling"
         vdd_scaled_str = str(vdd_scaled).replace('.', '')
         if vdd_scaled == 1:
             vdd_scaled_str = '1'
-        i_leak_hold_file_path = os.path.join(f'{data}/out/hold/ileak',
+        i_leak_hold_file_path = os.path.join(f'{data}/out/hold/ileak/vdd_scaling',
                                              i_leak_hold_file_path + '_' + vdd_scaled_str + '.txt')
         with open(i_leak_hold_file_path, 'w') as file:
             for val in i_leak_hold:

@@ -91,11 +91,11 @@ def snm_read_vdd_scaling_analysis():
             else:
                 snm_read.append(snm_max_read)
 
-        snm_gaussian_vth_read_file_path = "snm_read"
+        snm_gaussian_vth_read_file_path = "snm_read_vdd_scaling"
         vdd_scaled_str = str(vdd_scaled).replace('.', '')
         if vdd_scaled == 1:
             vdd_scaled_str = '1'
-        snm_gaussian_vth_read_file_path = os.path.join(f'{data}/out/read/snm',
+        snm_gaussian_vth_read_file_path = os.path.join(f'{data}/out/read/snm/vdd_scaling',
                                                        snm_gaussian_vth_read_file_path + '_' + vdd_scaled_str + '.txt')
         with open(snm_gaussian_vth_read_file_path, 'w') as file:
             for val in snm_read:

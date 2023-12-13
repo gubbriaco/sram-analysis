@@ -2,7 +2,7 @@ from properties import vwl_hold, vbl_hold, vblneg_hold, w_ax_range
 from properties import vdd_standard
 from properties import vsweep_standard
 from properties import rit_models, dc_vsweep_standard, w_ax_step_param_standard, save_w_ax_standard
-from utils.path import ltspice, schematics, images
+from utils.path import ltspice, schematics, images, data
 from utils.patterns import w_ax_standard_pattern
 from models.snm import graphical_processing, RequestPlot
 from models.ops import save_image, get_data, __init_model__, CircuitType, OperationType, RequestPlotSchematic
@@ -120,10 +120,15 @@ def standard_hold_snm_analysis():
     save_image(image_path=os.path.join(images, "snm_standard_hold.png"), plt=plt)
     plt.show()
 
-    return (
-        w_ax_standard_hold,
-        snm_standard_hold
-    )
+    w_ax_hold_standard_file_path = os.path.join(data, 'out', 'hold', 'snm', 'standard', 'wax_hold_standard.txt')
+    with open(w_ax_hold_standard_file_path, 'w') as file:
+        for val in w_ax_standard_hold:
+            file.write(f'{val}\n')
+
+    snm_hold_standard_file_path = os.path.join(data, 'out', 'hold', 'snm', 'standard', 'snm_hold_standard.txt')
+    with open(snm_hold_standard_file_path, 'w') as file:
+        for val in snm_standard_hold:
+            file.write(f'{val}\n')
 
 
 if __name__ == "__main__":

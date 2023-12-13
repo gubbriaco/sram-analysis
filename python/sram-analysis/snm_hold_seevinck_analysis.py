@@ -2,7 +2,7 @@ from properties import vwl_hold, vbl_hold, vblneg_hold, w_ax_range
 from properties import vdd_seevinck
 from properties import vsweep_seevinck
 from properties import rit_models, dc_vsweep_seevinck, snm_max, snm_min, w_ax_step_param_seevinck, save_w_ax_seevinck
-from utils.path import ltspice, schematics, images
+from utils.path import ltspice, schematics, images, data
 from utils.patterns import w_ax_seevinck_pattern, snm_max_seevinck_pattern, snm_min_seevinck_pattern
 from models.snm import graphical_processing, rotate_points, seevinck_processing, RequestPlot
 from models.ops import save_image, get_data, __init_model__, CircuitType, OperationType, RequestPlotSchematic
@@ -187,10 +187,15 @@ def seevinck_hold_snm_analysis():
     save_image(image_path=os.path.join(images, "v1_minus_v2_seevinck_hold.png"), plt=plt)
     plt.show()
 
-    return (
-        w_ax_seevinck_hold,
-        snm_seevinck_hold
-    )
+    w_ax_hold_seevinck_file_path = os.path.join(data, 'out', 'hold', 'snm', 'seevinck', 'wax_hold_seevinck.txt')
+    with open(w_ax_hold_seevinck_file_path, 'w') as file:
+        for val in w_ax_seevinck_hold:
+            file.write(f'{val}\n')
+
+    snm_hold_seevinck_file_path = os.path.join(data, 'out', 'hold', 'snm', 'seevinck', 'snm_hold_seevinck.txt')
+    with open(snm_hold_seevinck_file_path, 'w') as file:
+        for val in snm_seevinck_hold:
+            file.write(f'{val}\n')
 
 
 if __name__ == "__main__":

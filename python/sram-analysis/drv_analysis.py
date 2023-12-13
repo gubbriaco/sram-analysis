@@ -6,8 +6,8 @@ from utils.dir import get_values_from_dir
 from models.ops import save_image
 
 
-def drv_analysis(plot_lock):
-    snm_hold_values = get_values_from_dir(os.path.join(data, 'out', 'hold', 'snm'))
+def drv_analysis():
+    snm_hold_values = get_values_from_dir(os.path.join(data, 'out', 'hold', 'snm', 'vdd_scaling'))
 
     '''
     Minimum voltage threshold such that the cells begin to fail beyond it.
@@ -31,11 +31,14 @@ def drv_analysis(plot_lock):
     vdd_step = 0.05
     vdd_scaled = np.arange(vdd_stop, vdd_start+vdd_step, vdd_step)
 
-    with plot_lock:
-        plt.bar(vdd_scaled, counter[::-1], width=0.04, color='blue', edgecolor='black')
-        plt.xlabel('vdd_scaled')
-        plt.ylabel('# failed_cells')
-        plt.title('DRV Analysis')
-        plt.tight_layout()
-        save_image(image_path=os.path.join(images, "drv_analysis.png"), plt=plt)
-        plt.show()
+    plt.bar(vdd_scaled, counter[::-1], width=0.04, color='blue', edgecolor='black')
+    plt.xlabel('vdd_scaled')
+    plt.ylabel('# failed_cells')
+    plt.title('DRV Analysis')
+    plt.tight_layout()
+    save_image(image_path=os.path.join(images, "drv_analysis.png"), plt=plt)
+    plt.show()
+
+
+if __name__ == "__main__":
+    drv_analysis()
