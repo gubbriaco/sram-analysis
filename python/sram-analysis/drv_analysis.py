@@ -27,7 +27,7 @@ def drv_analysis():
         counter.append(count)
 
     vdd_start = 1.0
-    vdd_stop = 0.25
+    vdd_stop = 0.05
     vdd_step = 0.05
     vdd_scaled = np.arange(vdd_stop, vdd_start+vdd_step, vdd_step)
 

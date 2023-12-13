@@ -1,4 +1,5 @@
 from utils.path import rit_models_for_ltspice_file_path, rit_models_for_ltspice_montecarlo_file_path
+import numpy as np
 
 ########################################################################################################################
 ########################################################################################################################
@@ -26,6 +27,20 @@ vblneg_read = '1'
 w_ax_start = 0.12
 w_ax_stop = 0.24
 w_ax_range = int(((w_ax_stop - w_ax_start) * 100) + 1)
+
+
+iterations_scaling = 20
+rows = round(int(np.sqrt(iterations_scaling)))
+tmp = iterations_scaling % rows
+iterations = iterations_scaling
+if tmp == 1:
+    iterations = iterations_scaling + (rows - 1)
+elif tmp == 2:
+    iterations = iterations_scaling + (rows - 2)
+cols = int(iterations / rows)
+vdd_start = 1.0
+vdd_stop = vdd_start - (iterations / 10)
+vdd_step = 0.05
 
 ########################################################################################################################
 ########################################################################################################################

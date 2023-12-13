@@ -4,22 +4,10 @@ import os
 from utils.dir import get_values_from_file
 from utils.path import data, images
 from models.ops import save_image
+from properties import vdd_start, vdd_stop, vdd_step, rows, cols
 
 
 def snm_read_vdd_scaling_plotting():
-    iterations_scaling = 16
-    rows = round(int(np.sqrt(iterations_scaling)))
-    tmp = iterations_scaling % rows
-    iterations = iterations_scaling
-    if tmp == 1:
-        iterations = iterations_scaling + (rows - 1)
-    elif tmp == 2:
-        iterations = iterations_scaling + (rows - 2)
-    cols = int(iterations / rows)
-    vdd_start = 1.0
-    vdd_stop = vdd_start - (iterations / 10)
-    vdd_step = 0.05
-
     row = 0
     col = 0
     fig_read_snm, axs_read_snm = plt.subplots(rows, cols, figsize=(16, 6))

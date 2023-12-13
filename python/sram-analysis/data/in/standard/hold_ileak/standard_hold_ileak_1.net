@@ -6,8 +6,8 @@ M5 Q Qneg 0 0 EECMOSN1 l={l_nmos_q} w={w_nmos_q}
 M6 VDD Qneg Q VDD EECMOSP1 l={l_pmos_q} w={w_pmos_q}
 M7 Q WL BL 0 EECMOSN1 l={l_ax} w={w_ax}
 M8 BLneg WL Qneg 0 EECMOSN1 l={l_ax} w={w_ax}
-Vblneg BLneg 0 0.25
-Vbl BL 0 0.25
+Vblneg BLneg 0 0.05
+Vbl BL 0 0.05
 Vwl WL 0 {vwl}
 Vsweep Qneg 0 {vsweep}
 .model NMOS NMOS
@@ -24,11 +24,11 @@ Vsweep Qneg 0 {vsweep}
 .PARAM w_pmos_q_neg=0.12u  ; Batch instruction
 .PARAM l_nmos_q_neg=0.12u  ; Batch instruction
 .PARAM w_nmos_q_neg=0.48u  ; Batch instruction
-.PARAM vdd=0.25  ; Batch instruction
+.PARAM vdd=0.05  ; Batch instruction
 .PARAM vsweep=1  ; Batch instruction
 .PARAM vwl=0  ; Batch instruction
 .inc ../../../../../../ltspice/utils/utils-montecarlo-experiments/RIT_Models_For_LTSPICE_MonteCarlo.txt
 .step param run 1 400 1
-.dc Vsweep 0 0.25 0.0025
+.dc Vsweep 0 0.05 0.0005
 .backanno
 .end

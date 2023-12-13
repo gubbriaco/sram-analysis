@@ -7,22 +7,10 @@ from models.ops import get_data, __init_model__, CircuitType, OperationType, Req
 import os
 from statistics import mean, stdev
 import numpy as np
+from properties import vdd_start, vdd_stop, vdd_step, rows, cols
 
 
 def snm_hold_vdd_scaling_analysis():
-    iterations_scaling = 16
-    rows = round(int(np.sqrt(iterations_scaling)))
-    tmp = iterations_scaling % rows
-    iterations = iterations_scaling
-    if tmp == 1:
-        iterations = iterations_scaling + (rows - 1)
-    elif tmp == 2:
-        iterations = iterations_scaling + (rows - 2)
-    cols = int(iterations / rows)
-    vdd_start = 1.0
-    vdd_stop = vdd_start - (iterations / 10)
-    vdd_step = 0.05
-    print('VDD Scaling Initialised')
     row = 0
     col = 0
     vdd_gaussian_vth_scaled = []
