@@ -10,9 +10,9 @@ def drv_analysis():
     snm_hold_values = get_values_from_dir(os.path.join(data, 'out', 'hold', 'snm', 'vdd_scaling'))
 
     '''
-    Minimum voltage threshold such that the cells begin to fail beyond it.
+    Minimum snm threshold such that the cells begin to fail beyond it.
     '''
-    threshold = 60
+    range_threshold = [58, 62]
 
     '''
     Counter for each vdd scaling. -> counter array
@@ -22,7 +22,7 @@ def drv_analysis():
     for row in snm_hold_values:
         count = 0
         for val in row:
-            if val < threshold:
+            if range_threshold[0] < val < range_threshold[1]:
                 count = count + 1
         counter.append(count)
 
