@@ -203,7 +203,7 @@ e8_gaussian_vth = '-0.707'
 
 # step param run
 step_param_run_gaussian_vth_start = 1
-step_param_run_gaussian_vth_stop = 400
+step_param_run_gaussian_vth_stop = 10000
 step_param_run_gaussian_vth_step = 1
 step_param_run_gaussian_vth = (
     f'.step param run '
@@ -297,7 +297,7 @@ vblneg_hold_ileak = (
 
 # step param run
 step_param_run_standard_ileak_start = 1
-step_param_run_standard_ileak_stop = 400
+step_param_run_standard_ileak_stop = 10000
 step_param_run_standard_ileak_step = 1
 step_param_run_standard_ileak = (
     f'.step param run '
