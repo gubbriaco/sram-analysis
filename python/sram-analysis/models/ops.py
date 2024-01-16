@@ -500,7 +500,7 @@ def __init_gaussian_vth_dc__(
         gaussian_vth_dc_netlist.add_instructions(param)
 
     gaussian_vth_dc_runner = SimRunner(output_folder=f"{data}/in/gaussian-vth/{operation}/")
-    gaussian_vth_dc_runner.run(netlist=gaussian_vth_dc_netlist, timeout=3600)
+    gaussian_vth_dc_runner.run(netlist=gaussian_vth_dc_netlist, timeout=36000)
     print('Successful/Total Simulations: ' + str(gaussian_vth_dc_runner.okSim) + '/' + str(
         gaussian_vth_dc_runner.runno), flush=True)
 
@@ -588,7 +588,7 @@ def __init_standard_ileak__(
         standard_ileak_netlist.add_instructions(param)
 
     standard_ileak_runner = SimRunner(output_folder=f"{data}/in/standard/{operation}_ileak/")
-    standard_ileak_runner.run(netlist=standard_ileak_netlist, timeout=3600)
+    standard_ileak_runner.run(netlist=standard_ileak_netlist, timeout=36000)
     print('Successful/Total Simulations: ' + str(standard_ileak_runner.okSim) + '/' + str(
         standard_ileak_runner.runno), flush=True)
 
